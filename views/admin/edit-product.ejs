@@ -1,0 +1,151 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+  
+
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+    <%- include('partials/admin-header') %>
+    <section class="content-main">
+        <form action="/admin/products/edit/<%= product._id %>" method="POST">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="content-title">Edit Product</h2>
+                            <div class="mb-4">
+                                <label for="product_title" class="form-label">Product title</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_title" name="product_title" value="<%= product.product_title %>">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="product_category" class="form-label">Product Category</label>
+                                    <select name="product_category" value="<%= product.product_category %>">
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category._id %>" <%= (product.product_category && category._id.toString() === product.product_category.toString()) ? 'selected' : '' %>><%= category.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="sub_category" class="form-label">Product Subcategory</label>
+                                    <select name="subcategory" value="<%= product.subcategory %>">
+                                        <% subcategories.forEach(subcategory => { %>
+                                            <% if (product.subcategory && subcategory._id && product.subcategory.toString() === subcategory._id.toString()) { %>
+                                                <option value="<%= subcategory._id %>" selected><%= subcategory.name %></option>
+                                            <% } else { %>
+                                                <option value="<%= subcategory._id %>"><%= subcategory.name %></option>
+                                            <% } %>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="product_color" class="form-label">Color</label>
+                                    <select class="form-control custom-select" id="product_color" name="color" value="">
+                                        <option value=""><%= product.color %></option>
+                                        <option value="white">White</option>
+                                        <option value="black">Black</option>
+                                        <option value="orange">Orange</option>
+                                        <option value="red">Red</option>
+                                        <option value="yellow">Yellow</option>
+                                        <option value="green">Green</option>
+                                        <option value="blue">Blue</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label d-block">Sizes</label>
+                                    <div class="d-inline-block me-2">
+                                        <input type="checkbox" class="form-check-input" name="sizes[]" value="S">
+                                        <label class="form-check-label">S</label>
+                                    </div>
+                                    <div class="d-inline-block me-2">
+                                        <input type="checkbox" class="form-check-input" name="sizes[]" value="M">
+                                        <label class="form-check-label">M</label>
+                                    </div>
+                                    <div class="d-inline-block me-2">
+                                        <input type="checkbox" class="form-check-input" name="sizes[]" value="L">
+                                        <label class="form-check-label">L</label>
+                                    </div>
+                                    <div class="d-inline-block">
+                                        <input type="checkbox" class="form-check-input" name="sizes[]" value="XL">
+                                        <label class="form-check-label">XL</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="brand" class="form-label">Brand</label>
+                                <select class="form-control custom-select" id="brand" name="brand" value="" >
+                                    <option value=""><%= product.brand %></option>
+                                    <option value="Glamour">Glamour</option>
+                                    <option value="Adidas">Adidas</option>
+                                    
+                                  </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4" name="description"><%= product.description %></textarea>
+                            </div>
+                            
+                            
+                            <div class="mb-4">
+                                <label for="current_images" class="form-label">Current Mul Images</label>
+                                <% product.images.forEach(image => { %>
+                                    <img src="/uploads/<%= image %>" class="product-image" alt="Product Image">
+                                <% }); %>
+                            </div>
+                            <div>
+                                <label for="new_images" class="form-label">New Images</label>
+                                <input class="form-control" type="file" name="images[]" accept="image/*" multiple>
+                            </div>
+                            
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Price</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="price" value="<%= product.price %>">
+                            </div>
+                            <div class="mb-4">
+                                <label for="current_images" class="form-label">Current Multiple Images</label>
+                                <% product.mimages.forEach(image => { %>
+                                    <img src="/uploads/<%= image %>" class="product-image" alt="Product Image">
+                                <% }); %>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="new_images" class="form-label">New Images (3 images max)</label>
+                                <input class="form-control" type="file" id="new_images" name="mimages[]" multiple accept="image/*" onchange="validateFileInput()">
+                                <input class="form-control" type="file" id="new_images" name="mimages[]" multiple accept="image/*" onchange="validateFileInput()">
+                                <input class="form-control" type="file" id="new_images" name="mimages[]" multiple accept="image/*" onchange="validateFileInput()">
+
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" name="stock" value="<%= product.stock %>">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div>
+                            
+                    <button class="btn btn-md rounded font-sm hover-up">Update</button>
+            </div>
+        </form>
+    </section>
+    
+</main>
+</body>
+</html>

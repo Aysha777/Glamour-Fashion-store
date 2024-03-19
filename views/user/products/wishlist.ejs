@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Product View Page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            height: 100%;
+            overflow: scroll;
+        }
+
+        .main {
+            padding: 50px 0;
+        }
+
+        .breadcrumb-wrap {
+            background-color: #f5f5f5;
+            padding: 20px 0;
+        }
+
+        .breadcrumb {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .table th {
+            border-top: 1px solid #45A8E1;
+        }
+
+        .table tr {
+            border-bottom: 1px solid #45A8E1;
+        }
+
+        .product-thumbnail img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-name a {
+            color: #333;
+        }
+
+        .price span {
+            color: #45A8E1;
+        }
+
+        .action {
+            color: #888;
+        }
+
+        .cart-action {
+            margin-top: 20px;
+        }
+
+        .cart-action a {
+            margin-right: 10px;
+        }
+
+        .cart-action .btn {
+            background-color: #45A8E1;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-action .btn:hover {
+            background-color: #333;
+        }
+
+        .icon-space {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body style="height: 100%; overflow: scroll;">
+
+    <%- include('../partials/user-header') %>
+
+    <main class="main">
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table shopping-summery text-center">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% wishlistItems.forEach(wishlistItem => { %>
+                                        <tr>
+                                            <td class="image product-thumbnail">
+                                                <% if (wishlistItem.productId && wishlistItem.productId.images && Array.isArray(wishlistItem.productId.images) && wishlistItem.productId.images.length > 0) { %>
+                                                    <img src="/uploads/<%= wishlistItem.productId.images[0] %>" alt="#" style="width: 100px; height: 100px; object-fit: contain;">
+                                                <% } else { %>
+                                                    <!-- Provide a default image or handle the case where there are no images -->
+                                                <% } %>
+                                            </td>
+                                            <td class="product-name">
+                                                <a href="#"><%= wishlistItem.productId.product_title %></a>
+                                            </td>
+                                            <td class="price">
+                                                <span>$<%= wishlistItem.productId.price %></span>
+                                            </td>
+
+                                            <td class="action">
+                                                <a href="#" class="btn btn-primary add-to-cart" data-product-id="<%= wishlistItem.productId._id %>">Add to Cart</a>
+                                            </td>
+                                            <td class="action">
+                                                <a href="#" class="btn btn-danger remove-from-wishlist" data-item-id="<%= wishlistItem._id %>">Remove</a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+
+    <script>
+        $(document).on('click', '.remove-from-wishlist', function(event) {
+    event.preventDefault();
+    const itemId = $(this).data('item-id'); // Change this line
+    console.log("Removing item with ID:", itemId); // Add this line to debug
+
+    removeFromWishlist(itemId); // Change this line
+});
+
+function removeFromWishlist(itemId) { // Change this line
+    $.ajax({
+        url: '/user/wishlist/remove',
+        method: 'POST',
+        data: { itemId }, // Change this line
+        success: function(response) {
+            console.log(response);
+            location.reload(); // Reload the page after removing the item
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+
+    </script>
+    <script>
+        $(document).on('click', '.add-to-cart', function(event) {
+            event.preventDefault();
+            const productId = $(this).data('product-id');
+            console.log("Adding product with ID:", productId); // Add this line to debug
+    
+            addToCart(productId);
+        });
+    
+        function addToCart(productId) {
+            $.ajax({
+                url: '/user/cart/add',
+                method: 'POST',
+                data: { productId },
+                success: function(response) {
+                    console.log(response);
+                    // Optionally, you can update the UI to reflect that the product has been added to the cart
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+    
+</body>
+
+</html>

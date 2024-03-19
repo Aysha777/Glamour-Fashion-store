@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Product View Page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    
+
+
+    <style>
+        body {
+            height: 100%;
+            overflow: scroll;
+        }
+
+        .main {
+            padding: 50px 0;
+        }
+
+        .breadcrumb-wrap {
+            background-color: #f5f5f5;
+            padding: 20px 0;
+        }
+
+        .breadcrumb {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .product-thumbnail img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-name a {
+            color: #333;
+        }
+
+        .price span {
+            color: #45A8E1;
+        }
+
+        .detail-qty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-down,
+        .qty-up {
+            cursor: pointer;
+            color: #333;
+        }
+
+        .action {
+            color: #888;
+        }
+
+        .cart-action {
+            margin-top: 20px;
+        }
+
+        .cart-action a {
+            margin-right: 10px;
+        }
+
+        .cart-action .btn {
+            background-color: #45A8E1;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-action .btn:hover {
+            background-color: #333;
+        }
+        .done-animation {
+            animation: bounce 1s ease infinite;
+            justify-content: center;
+            align-items: center;
+            margin-left: 130px;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+
+<body style="height: 100%; overflow: scroll; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+    <% include('../partials/user-header') %>
+    <main class="main">
+        <div class="container mt-5">
+            <div>
+                <img src="/imgs/success/icons8-success.gif" alt="Done" class="done-animation">
+
+            </div>
+            <div class="alert alert-success" role="alert" id="successMessage">
+                <%= success %>
+            </div>
+            
+            <div class="cart-action" style="display: flex; justify-content: center;">
+                <a href="/user/home" class="btn btn-primary">Continue Shopping</a>
+                <a href="/user/products/order-profile" class="btn btn-secondary">View Order Details</a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

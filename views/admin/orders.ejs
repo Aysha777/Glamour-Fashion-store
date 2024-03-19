@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your view product</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .float-end {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order List </h2>
+                <p>Glamour Fashion store</p>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <!-- card-header end// -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date</th>
+                            <th scope="col" class="text-end"> Action </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% orders.forEach(order => { %>
+                            <% order.items.forEach(item => { %>
+                                <tr>
+                                    <td><%= order._id %></td>
+                                    <td><%= item.product ? item.product._id : "N/A" %></td>
+                                    <td><%= item.product ? item.product.product_title : "N/A" %></td>
+                                    <td><b><%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></b></td>
+                                    <td><%= order.billingDetails.email %></td>
+                                    <td>$<%= order.totalPrice %></td>
+                                    <td>
+                                        <select name="status" class="order-status" onchange="saveOrderStatus(this)">
+                                            <option value="Pending" style="background-color: #ffc107; color: black;">Pending</option>
+                                            <option value="Processing" style="background-color: #007bff; color: white;">Processing</option>
+                                            <option value="Shipped" style="background-color: #28a745; color: white;">Shipped</option>
+                                            <option value="Delivered" style="background-color: #17a2b8; color: white;">Delivered</option>
+                                            <option value="Cancelled" style="background-color: #dc3545; color: white;">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td><%= order.createdAt.toDateString() %></td>
+                                    <td class="text-end">
+                                        <form action="/admin/orders/<%= order._id %>" method="GET" style="display: inline;">
+                                            <button type="submit" class="btn btn-md rounded font-sm text-danger">View Details</button>
+                                        </form>
+                                        
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                </div> <!-- table-responsive //end -->
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+        <div class="pagination-area mt-15 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <footer class="main-footer font-xs">
+        <div id="message" class="alert <% if (typeof successMessage !== 'undefined') { %>alert-success<% } else if (typeof errorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
+            <% if (typeof successMessage !== 'undefined') { %>
+            <%= successMessage %>
+            <% } else if (typeof errorMessage !== 'undefined') { %>
+            <%= errorMessage %>
+            <% } %>
+        </div>
+    </footer>
+
+
+</main>
+
+<script>
+    document.querySelectorAll('.order-status').forEach(select => {
+        select.addEventListener('change', function() {
+            saveOrderStatus(this);
+        });
+    });
+
+    async function saveOrderStatus(select) {
+        const row = select.parentNode.parentNode;
+        const orderId = row.querySelector('td:first-child').innerText;
+        const productId = row.querySelector('td:nth-child(2)').innerText.trim();
+        const productTitle = row.querySelector('td:nth-child(3)').innerText.trim();
+        const name = row.querySelector('td:nth-child(4)').innerText.trim();
+        const email = row.querySelector('td:nth-child(5)').innerText.trim();
+        const total = row.querySelector('td:nth-child(6)').innerText.trim().substring(1); // Remove the dollar sign
+        const status = select.value;
+        const date = row.querySelector('td:nth-child(8)').innerText.trim();
+
+        const orderData = { orderId, productId, productTitle, name, email, total, status, date };
+
+        try {
+            const response = await fetch('/order/save-order-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify([orderData]) // Wrap orderData in an array
+            });
+
+            if (response.ok) {
+                console.log(`Order status for order ${orderId} updated successfully`);
+            } else {
+                throw new Error('Failed to update order status');
+            }
+        } catch (error) {
+            console.error('Error updating order status:', error);
+        }
+    }
+
+</script>
+
+</body>
+</html>

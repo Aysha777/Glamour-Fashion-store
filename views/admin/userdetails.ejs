@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        /* Add your custom styles here */
+        .user-details-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-details-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .user-details-item {
+            margin-bottom: 10px;
+        }
+
+        .user-details-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .user-details-value {
+            color: #666;
+        }
+
+        .user-details-actions {
+            margin-top: 20px;
+        }
+
+        .user-details-action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-details-action-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+    <section class="content-main">
+        <h3 class="content-title card-title" style="color: #4caf50; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">User Management</h3>
+        <div class="container">
+                <p>Glamour Fashion store</p>
+            </div>
+        </div>
+        <div class="user-details-container">
+            <h1 class="user-details-title">User Details</h1>
+            <div class="user-details-item">
+                <span class="user-details-label">Name:</span>
+                <span class="user-details-value"><%= user.name %></span>
+            </div>
+            <div class="user-details-item">
+                <span class="user-details-label">Email:</span>
+                <span class="user-details-value"><%= user.email %></span>
+            </div>
+
+            <!-- Add more user details here as needed -->
+
+            <div class="user-details-actions">
+                <a href="/admin/users/<%= user._id %>/edit" class="user-details-action-btn">Edit</a>
+                <form action="/admin/users/<%= user._id %>/block" method="POST" style="display: inline-block;">
+                    <button type="submit" class="user-details-action-btn">Block</button>
+                </form>
+                
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function navigateToPage(pageNumber) {
+        window.location.href = `/admin/users?page=${pageNumber}`;
+    }
+</script>
+
+</body>
+</html>

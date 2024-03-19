@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordered Product Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #007bff;
+            padding: 15px;
+            text-align: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+        .card, .side-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .card-header h5, .card-body h5, .details h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .product-details {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .image-box {
+            flex: 0 0 150px;
+            margin-right: 20px;
+        }
+        .image-box img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .no-image {
+            font-style: italic;
+            color: #888;
+        }
+        .side-card {
+            flex: 0 0 calc(25% - 20px);
+        }
+        .side-card h4 {
+            color: #007bff;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+        .side-card p {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/user/products/user-profile" style="text-decoration: none; color: #fff;">Back to Orders</a>
+    </header>
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="order-id">Order Status: <%= order.orderStatus %></h5>
+            </div>
+            <div class="card-body">
+                <h5>Shipping to: <%= billingDetails.firstName %> <%= billingDetails.lastName %></h5>
+                <section class="product-details">
+                    <div class="image-box">
+                        <% if (product.productImage && product.productImage.length > 0) { %>
+                            <img src="/uploads/<%= product.productImage[0] %>" alt="Product Image">
+                        <% } else { %>
+                            <p class="no-image">No image available</p>
+                        <% } %>
+                    </div>
+                    <div class="details">
+                        <h2><%= product.product_title %></h2>
+                       
+                        <% order.items.forEach(function(item) { %>
+                            <p><b>Price:</b> ₹ <%=item.price %></p>
+                            <% }); %>
+                    </div>
+                </section>
+                <button id="cancelOrderBtn" onclick="cancelOrder('<%= order._id %>')" style="display: block; margin: 0 auto; background-color: #ff0000; color: #ffffff; padding: 10px 20px; border: none; border-radius: 5px;">Cancel Order</button>
+
+            </div>
+        </div>
+        <div class="side-card">
+            <h4>Order Details</h4>
+            <p><b>Order ID:</b> <%= order._id %></p>
+            <p><b>Order Time:</b> <%= order.createdAt %></p>
+            <p><b>Payment Method:</b> <%= order.billingDetails.payment_option %></p>
+            <% order.items.forEach(function(item) { %>
+            <p><b>Product Total:</b> ₹ <%=item.price %></p>
+            <% }); %>
+            <p><b>Shipping To:</b> <%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></p>
+            <p><b>Discount Code:</b> <%= order.couponCode %></p>
+            <p><b>Discount Amount:</b> ₹ <%= order.discountedTotal %></p>
+            <p><b>Order Total:</b> ₹ <%= order.totalPrice %></p>
+        </div>
+    </main>
+</body>
+<script>
+    // Function to show/hide cancel button based on order status
+    function toggleCancelButton(orderStatus) {
+        const cancelButton = document.getElementById('cancelOrderBtn');
+        if (orderStatus === 'Pending' || orderStatus === 'Processing') {
+            cancelButton.style.display = 'block'; // Show the button
+        } else {
+            cancelButton.style.display = 'none'; // Hide the button
+            
+        }
+    }
+
+    // Call the function to initially set the visibility of the cancel button
+    toggleCancelButton('<%= order.orderStatus %>');
+</script>
+
+
+
+</html>

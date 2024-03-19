@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Entry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #BCE0F5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    
+    .card {
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    form {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    label {
+      margin-right: 5px;
+    }
+
+    input {
+      padding: 5px 10px;
+      width: 50px;
+      text-align: center;
+      border-radius: 0;
+    }
+
+    button {
+      padding: 5px 10px;
+      background-color: #45A8E1;
+      color: #fff;
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+    }
+
+    span {
+      font-weight: bold;
+      color: #45A8E1;
+    }
+
+    a {
+      text-decoration: none;
+      color: #45A8E1;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <section class="otpenter">
+        <div class="card">
+          <h2>Enter OTP</h2>
+          <form method="POST" action="/verifyOTP">
+            <label for="otp">OTP:</label>
+            <input type="text" id="otp" name="otp" maxlength="6" required>
+            <button type="submit">Submit OTP</button>
+          </form>
+
+          <% if (typeof errorMessage !== 'undefined') { %>
+            <p style="color: red;"><%= errorMessage %></p>
+          <% } %>
+
+          <p id="resendMessage">
+            Didn't receive the OTP? Retry in <span id="countdown">01:00</span>
+            <!-- Include userId in the "Resend OTP" link -->
+            <a href="/resendOTP?userId=<%= typeof userId !== 'undefined' ? userId : '' %>" style="color: #007BFF; display: block; text-decoration: none; font-weight: bold;"></a>
+          </p>
+        </div>
+  </section>
+        <script>
+          var countdownValue = 1 * 60; // 1 minute
+          var countdownDisplay = document.getElementById('countdown');
+          var userId = "<%= typeof userId !== 'undefined' ? userId : '' %>"; // Define userId or set it to an empty string
+         
+          var userReceivedEmail = false;
+
+
+        function startCountdown() {
+          function updateCountdown() {
+            var minutes = Math.floor(countdownValue / 60);
+            var seconds = countdownValue % 60;
+            countdownDisplay.textContent = pad(minutes) + ":" + pad(seconds);
+
+            if (countdownValue <= 0) {
+              // Replace "Retry in 00:00" with the "Resend OTP" link after the timer finishes
+              document.getElementById('resendMessage').innerHTML = '<a href="/resendOTP?userId=' + userId + '">Resend OTP</a>';
+            } else {
+              countdownValue--;
+              setTimeout(updateCountdown, 1000);
+            }
+          }
+
+          document.getElementById('resendMessage').style.display = 'block';
+
+              if (userReceivedEmail) {
+            updateCountdown();
+          }
+        }
+
+          function pad(number) {
+            return (number < 10 ? '0' : '') + number;
+          }
+
+          function setEmailReceived() {
+            userReceivedEmail = true;
+
+            startCountdown();
+          }
+          // Start the countdown
+          setEmailReceived();
+        </script>
+      
+</body>
+</html>

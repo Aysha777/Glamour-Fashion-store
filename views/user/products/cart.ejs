@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Product View Page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/svg+xml"
+      href="assets/imgs/theme/favicon.svg"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <style>
+      body {
+        height: 100%;
+        overflow: scroll;
+      }
+
+      .main {
+        padding: 50px 0;
+      }
+
+      .breadcrumb-wrap {
+        background-color: #f5f5f5;
+        padding: 20px 0;
+      }
+
+      .breadcrumb {
+        font-size: 16px;
+        margin: 0;
+      }
+
+      .table {
+        margin-top: 20px;
+      }
+
+      .table th {
+        border-top: 1px solid #45a8e1; /* Add this line to create a border before each table header */
+      }
+      .table tr {
+        border-bottom: 1px solid #45a8e1; /* Add this line to create a border after every row */
+      }
+
+      .product-thumbnail img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+
+      .product-name a {
+        color: #333;
+      }
+
+      .price span {
+        color: #45a8e1;
+      }
+
+      .detail-qty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .qty-down,
+      .qty-up {
+        cursor: pointer;
+        color: #333;
+        font-size: 18px;
+      }
+
+      .quantity-input {
+        width: 50px;
+        text-align: center;
+        margin: 0 10px;
+        font-size: 16px;
+      }
+
+      .price,
+      .action {
+        vertical-align: middle;
+      }
+
+      .action {
+        color: #888;
+      }
+
+      .cart-action {
+        margin-top: 20px;
+      }
+
+      .cart-action a {
+        margin-right: 10px;
+      }
+
+      .cart-action .btn {
+        background-color: #45a8e1;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .cart-action .btn:hover {
+        background-color: #333;
+      }
+
+      .icon-space {
+        margin-right: 5px; /* Adjust the value to increase or decrease the space */
+      }
+      .quantity-box {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body style="height: 100%; overflow: scroll">
+    <% include('../partials/user-header') %>
+
+    <main class="main">
+      <section class="mt-50 mb-50">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table shopping-summery text-center clean">
+                  <thead>
+                    <tr class="main-heading">
+                      <th scope="col">Image</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Subtotal</th>
+                      <th scope="col">Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (cart && cart.items && Array.isArray(cart.items)) { %>
+                    <% cart.items.forEach(item => { %>
+                    <tr
+                      style="vertical-align: middle"
+                      data-item-id="<%= item._id %>"
+                      data-product-id="<%= item.product._id %>"
+                    >
+                      <td class="image product-thumbnail">
+                        <% if (item.product && item.product.images &&
+                        Array.isArray(item.product.images) &&
+                        item.product.images.length > 0) { %>
+                        <img
+                          src="/uploads/<%= item.product.images[0] %>"
+                          alt="#"
+                          style="
+                            width: 100px;
+                            height: 100px;
+                            object-fit: contain;
+                          "
+                        />
+                        <% } else { %>
+                        <!-- Provide a default image or handle the case where there are no images -->
+                        <img
+                          src="/path/to/default/image.jpg"
+                          alt="#"
+                          style="
+                            width: 100px;
+                            height: 100px;
+                            object-fit: contain;
+                          "
+                        />
+                        <% } %> <% if (item.product && item.product.stock > 0) {
+                        %>
+                        <span style="color: green">In Stock</span>
+                        <% } else { %>
+                        <span style="color: red">Out of Stock</span>
+                        <p style="color: black">
+                          * Please remove this product from the cart because
+                          it's out of stock.
+                        </p>
+
+                        <% } %>
+                      </td>
+
+                      <td
+                        class="product-des product-name"
+                        style="vertical-align: middle"
+                      >
+                        <h5 class="product-name">
+                          <a
+                            href="<%= '/shop-product-right/' + item.product._id %>"
+                            ><%= item.product.product_title %></a
+                          >
+                        </h5>
+                      </td>
+                      <td class="price" data-title="Price" style="vertical-align: middle">
+                            <% if (item.product && typeof item.product.price === 'number') { %>
+                                <span class="product-price" data-product-id="<%= item.product._id %>">$<%= item.product.price.toFixed(2) %></span>
+                            <% } else { %>
+                                <span class="product-price" data-product-id="<%= item.product._id %>">N/A</span>
+                            <% } %>
+                        </td>
+
+
+
+                      <td
+                        class="text-center"
+                        data-title="Stock"
+                        style="vertical-align: middle"
+                      >
+                        <div
+                          class="detail-qty border radius d-flex align-items-center justify-content-center"
+                        >
+                          <a href="#" class="qty-down"
+                            ><i class="fas fa-angle-down"></i
+                          ></a>
+                          <span class="qty-val"><%= item.quantity %></span>
+                          <a href="#" class="qty-up"
+                            ><i class="fas fa-angle-up"></i
+                          ></a>
+                        </div>
+                      </td>
+                      <td class="text-right subtotal" data-title="Subtotal" style="vertical-align: middle">
+                        <span>$<%= item.subtotal.toFixed(2) %></span>
+                        </td>
+
+
+                      <td class="action">
+                        <a
+                          href="#"
+                          class="btn btn-danger remove-from-cart"
+                          data-item-id="<%= item._id %>"
+                          >Remove</a
+                        >
+                      </td>
+                    </tr>
+                    <% }); %> <% } else { %>
+                    <tr>
+                      <td colspan="6">Your cart is empty</td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td
+                        colspan="4"
+                        class="text-right main-heading"
+                        data-title="Total"
+                      >
+                        <strong>Total:</strong>
+                      </td>
+                      <td
+                        colspan="2"
+                        class="text-right main-heading"
+                        data-title="Total"
+                      >
+                        <% if (cart && cart.totalPrice !== undefined) { %>
+                        <span id="cart-total"><%= cart.totalPrice %></span>
+                        <% } else { %>
+                        <span id="cart-total">0.00</span>
+                        <!-- or any default value you prefer -->
+                        <% } %>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="cart-action text-end">
+                <a href="/user/products/checkout" class="btn"
+                  ><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(document).on("click", ".remove-from-cart", function (event) {
+          event.preventDefault();
+          const itemId = $(this).data("item-id"); // Correctly retrieve itemId
+          console.log("Removing item with ID:", itemId);
+
+          // Call the function to remove the item
+          removeFromCart(itemId);
+        });
+
+        function removeFromCart(itemId) {
+          console.log("Remove from cart function called with item ID:", itemId);
+          $.ajax({
+            url: "/user/cart/remove",
+            method: "POST",
+            data: { itemId }, // Ensure that itemId is sent correctly
+            success: function (response) {
+              console.log(response);
+              location.reload(); // Reload the page after removing the item
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+            },
+          });
+        }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Increase quantity
+        $(".qty-up").click(function (e) {
+          e.preventDefault();
+          var $row = $(this).closest("tr");
+          var itemId = $row.data("item-id");
+          var productId = $row.data("product-id");
+          var $quantityInput = $row.find(".qty-val");
+          var currentQuantity = parseInt($quantityInput.text());
+          if (!isNaN(currentQuantity)) {
+            $quantityInput.text(currentQuantity + 1);
+            updateCart(itemId, productId, currentQuantity + 1);
+          }
+        });
+
+        // Decrease quantity
+        $(".qty-down").click(function (e) {
+          e.preventDefault();
+          var $row = $(this).closest("tr");
+          var itemId = $row.data("item-id");
+          var productId = $row.data("product-id");
+          var $quantityInput = $row.find(".qty-val");
+          var currentQuantity = parseInt($quantityInput.text());
+          if (!isNaN(currentQuantity) && currentQuantity > 1) {
+            $quantityInput.text(currentQuantity - 1);
+            updateCart(itemId, productId, currentQuantity - 1);
+          }
+        });
+
+        // Update cart after changing quantity
+        function updateCart(itemId, productId, newQuantity) {
+            const $row = $('tr[data-item-id="' + itemId + '"]');
+            const $quantityInput = $row.find(".qty-val");
+            const $subtotalCell = $row.find(".subtotal"); // Select the cell where subtotal is displayed
+  
+          const price =
+            parseFloat(
+              $('.product-price[data-product-id="' + productId + '"] span').text()
+            ) ;
+        
+            const subtotal = price * newQuantity;
+
+          // Perform AJAX request to update the cart with the new quantity
+          $.ajax({
+            url: "/user/cart/updateQuantity",
+            method: "POST",
+            data: {
+              itemId: itemId,
+              productId: productId,
+              quantity: newQuantity,
+              subtotal: subtotal,
+            },
+            success: function (response) {
+              // Handle success response
+              console.log(response);
+              
+              $quantityInput.text(newQuantity);
+              $subtotalCell.text("$" + subtotal.toFixed(2));
+
+              // Update subtotal and total price on the page
+              updateSubtotalAndTotal(response.totalPrice);
+              location.reload();
+            },
+            error: function (xhr, status, error) {
+              // Handle error
+              console.error(error);
+            },
+          });
+        }
+
+        // Update subtotal and total price in the HTML
+        function updateSubtotalAndTotal(cart) {
+          console.log("update subtotal and total price :", cart);
+          let subtotal = 0;
+
+          if (cart && cart.items && Array.isArray(cart.items) && cart.items.length > 0) {
+            cart.items.forEach((item) => {
+                console.log("Item:", item);
+                // console.log("Price:", item.product.price);
+                // console.log("Quantity:", item.quantity);
+                console.log("subtotal:", item.subtotal);
+                subtotal += item.subtotal;
+            });
+        }
+          console.log("subTotal:",subtotal);
+          $("#cart-total").text("$" + subtotal.toFixed(2));
+        //   updateTotalPrice(subtotal);
+
+            updateTotalPrice(subtotal);
+        }
+        function updateTotalPrice(subtotal) {
+          console.log("update total price:",subtotal);
+
+          // Update the total price on the page
+          $("#cart-total").text("$" + subtotal.toFixed(2));
+        }
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        console.log("Document ready.");
+        // Variable to track if quantity is clicked
+        // var quantityClicked = false;
+
+        // Hide quantity boxes when page loads
+        $(".quantity-box").hide();
+        console.log("Quantity boxes hidden.");
+
+        // Toggle quantity update box on click
+        $(document).on("click", ".item-quantity", function (event) {
+          event.preventDefault();
+          console.log("Quantity clicked.");
+
+          const productId = $(this).data("product-id");
+          console.log("Product ID:", productId);
+
+          const quantityBox = $(
+            '.quantity-box[data-product-id="' + productId + '"]'
+          );
+          console.log("Quantity box found:", quantityBox.length);
+
+          quantityBox.show();
+          console.log("Quantity box shown.");
+          // quantityClicked = true; // Update quantity clicked status
+          // console.log("Quantity box clicked for product ID:", productId);
+        });
+
+        // In your HTML file or script
+
+        function isQuantityClicked() {
+          return quantityClicked;
+        }
+      });
+    </script>
+  </body>
+</html>

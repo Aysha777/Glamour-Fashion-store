@@ -1,0 +1,85 @@
+<div class="screen-overlay"></div>
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a href="/admin/dashboard" class="brand-wrap">
+            <img src="/imgs/logo/lg.jpg" alt="logo" style="max-height: 35px; margin: 0; padding: 0;">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+            </button>
+        </div>
+    </div>
+    <nav class="menu-container">
+      <ul class="menu-aside">
+        <li class="menu-item has-submenu">
+          <a class="menu-link" href="/products/user-details"> <i class="icon material-icons md-shopping_bag"></i>
+              <span class="text">Show User Details</span>
+          </a>
+      </li>
+      </ul>
+      <br>
+      <br>
+  </nav>
+</aside>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const minimizeButton = document.querySelector('.btn-aside-minimize');
+    const navbarAside = document.querySelector('.navbar-aside');
+
+    minimizeButton.addEventListener('click', function () {
+      navbarAside.classList.toggle('minimized');
+    });
+  });
+</script>
+  <style>
+    /* Basic styles for the sidebar */
+    .sidebar {
+      width: 200px;
+      background-color: #f1f1f1;
+      padding: 20px;
+      position: fixed;
+      top: 50px;
+      left: 0;
+      height: 100%;
+      overflow-y: auto;
+    }
+  
+    /* Style for the navigation links */
+    .sidebar nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    .sidebar nav ul li {
+      margin-bottom: 10px;
+    }
+  
+    .sidebar nav ul li a {
+      display: block;
+      padding: 8px 0;
+      text-decoration: none;
+      color: #333;
+    }
+  
+    .sidebar nav ul li a:hover {
+      color: #000;
+      font-weight: bold;
+    }
+  
+    /* Additional styles for setting full height */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+  
+    main {
+      margin-left: 220px; /* Adjust to accommodate sidebar width */
+      padding: 20px;
+      height: 100vh; /* Full viewport height */
+      overflow-y: auto; /* Allow main content to scroll if needed */
+    }
+  </style>

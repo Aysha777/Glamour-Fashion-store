@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .user-details {
+            font-weight: bold;
+        }
+
+        .view-details-link {
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .view-details-link:hover {
+            color: #0056b3;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination-item {
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .pagination-item.active {
+            font-weight: bold;
+        }
+
+        .block-button, .unblock-button {
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .block-button {
+            background-color: #ff5252; /* Red color */
+            color: #fff;
+            border: none;
+        }
+
+        .block-button:hover {
+            background-color: #ff1744; /* Darker red on hover */
+        }
+
+        .unblock-button {
+            background-color: #4caf50; /* Green color */
+            color: #fff;
+            border: none;
+        }
+
+        .unblock-button:hover {
+            background-color: #388e3c; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+    <section class="content-main">
+        <h3 class="content-title card-title" style="color: #4caf50; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">User Management</h3>
+        <div class="container">
+            
+            <h5>User List</h5>
+            <div class="card mb-4">
+                
+                <ul class="user-list">
+                    <% users.forEach(user => { %>
+                        <% if (!user.deleted) { %>
+                            <li class="user-item">
+                                <span class="user-details"><%= user.name %> (<%= user.email %>)</span>
+                                <a href="/admin/users/<%= user._id %>" class="view-details-link">View Details</a>
+                                <% if (user.blocked) { %>
+                                    <!-- Show "Unblock" option if user is blocked -->
+                                    <form action="/admin/users/<%= user._id %>/unblock" method="POST" style="display: inline-block;">
+                                        <button type="submit" class="unblock-button">Unblock</button>
+                                    </form>
+                                <% } else { %>
+                                    <!-- Show "Block" option if user is not blocked -->
+                                    <form action="/admin/users/<%= user._id %>/block" method="POST" style="display: inline-block;">
+                                        <button type="submit" class="block-button">Block</button>
+                                    </form>
+                                <% } %>
+                            </li>
+                        <% } %>
+                    <% }); %>
+                </ul>
+                <div class="pagination">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="#" class="pagination-item <%= currentPage === i ? 'active' : '' %>"
+                           onclick="navigateToPage(<%= i %>)"><%= i %></a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function navigateToPage(pageNumber) {
+        window.location.href = `/admin/users?page=${pageNumber}`;
+    }
+</script>
+
+</body>
+</html>

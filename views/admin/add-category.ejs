@@ -1,0 +1,60 @@
+<!-- add-category.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags, title, and CSS links -->
+    <!-- ... -->
+
+    <title>Add Category</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <!-- Additional styles or CDN links can be added here if needed -->
+</head>
+<body>
+
+<!-- Include header and other partials -->
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+
+<main class="main-wrap">
+
+
+    <section class="content-main">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="content-title">Add New Category</h2>
+
+                        <!-- Form for adding a new category -->
+                        <form action="/admin/add-category" method="POST">
+                            <div class="mb-3">
+                                <label for="categoryName" class="form-label">Category Name</label>
+                                <input type="text" class="form-control" id="categoryName" name="categoryName">
+                            </div>
+                            
+        
+                            <button type="submit" class="btn btn-md rounded font-sm hover-up">Add Category</button>
+                        </form>
+                        <!-- End of the form -->
+                        
+                        <!-- Success message -->
+                        <div id="success-message" class="alert alert-success" role="alert">
+                            <% if (typeof successMessage !== 'undefined') { %>
+                              <%= successMessage %>
+                            <% } %>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer section -->
+    <footer class="main-footer font-xs">
+        <!-- Footer content -->
+        <!-- ... -->
+    </footer>
+</main>
+
+</body>
+</html>

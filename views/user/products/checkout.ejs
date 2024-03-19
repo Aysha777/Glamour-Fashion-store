@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Product View Page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-o0rMR3DW9X0ZZG7+U5fB9Ff4cBIyqNXacV0VQ3LG5aY53hVsqpNMr23dWPLNF2Bi" crossorigin="anonymous">
+
+    <style>
+        body {
+            height: 100%;
+            overflow: scroll;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            padding: 50px 0;
+        }
+
+        .breadcrumb-wrap {
+            background-color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .breadcrumb {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .product-thumbnail img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-name a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .product-name a:hover {
+            color: #45A8E1;
+        }
+
+        .price span {
+            color: #45A8E1;
+            font-weight: bold;
+        }
+
+        .detail-qty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-down,
+        .qty-up {
+            cursor: pointer;
+            color: #333;
+        }
+
+        .qty-down:hover,
+        .qty-up:hover {
+            color: #45A8E1;
+        }
+
+        .action {
+            color: #888;
+        }
+
+        .cart-action {
+            margin-top: 20px;
+        }
+
+        .cart-action a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #45A8E1;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .cart-action a:hover {
+            background-color: #333;
+        }
+
+        /* Styling for options */
+        #couponSelect {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #couponSelect option.green {
+            color: green;
+        }
+
+        /* Disable red-colored coupons */
+#couponSelect option.red {
+    color: red !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+}
+
+
+
+
+        .coupon-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .applyCouponBtn {
+            background-color: #45A8E1;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .apply-coupon-btn:hover {
+            background-color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .border {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .heading_s1 h4 {
+            color: #333;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .mt-50 {
+            margin-top: 50px;
+        }
+
+        .mb-50 {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+
+<body style="height: 100%; overflow: scroll;align-items: center;justify-content: center;">
+
+    <% include('../partials/user-header') %>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Your Cart
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="col-lg-6 col-md-12">
+                    <div class="border p-md-4 p-30 border-radius cart-totals">
+                        <div class="heading_s1 mb-3">
+                            <h4>Cart Totals</h4>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="cart_total_label">Cart Subtotal</td>
+                                        <td class="cart_total_amount">
+                                            <span class="font-lg fw-900 text-brand">
+                                                <td class="text-right main-heading" data-title="Total">
+                                                    <% if (cart && cart.totalPrice !== undefined) { %>
+                                                    <span id="cart-total1"><%= cart.totalPrice %></span>
+                                                    <% } else { %>
+                                                    <span id="cart-total1">0.00</span> <!-- or any default value you prefer -->
+                                                    <% } %>
+
+                                                </td>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_total_label">Shipping</td>
+                                        <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                        <td class="cart_total_label">Total</td>
+                                        <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">
+                                                    <td class="text-right main-heading" data-title="Total">
+                                                        <% if (cart && cart.totalPrice !== undefined) { %>
+                                                        <span id="cart-total"><%= cart.totalPrice %></span>
+                                                        <% } else { %>
+                                                        <span id="cart-total">0.00</span> <!-- or any default value you prefer -->
+                                                        <% } %>
+
+                                                    </td>
+                                                </span></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3">
+                            <form id="applyCouponForm">
+                                <label for="couponSelect">Select Coupon:</label>
+                                <select id="couponSelect" name="couponCode">
+                                    <!-- Options for coupons will be dynamically added here -->
+                                </select>
+                                <button type="submit" id="applyCouponBtn">Apply Coupon</button>
+                            </form>
+                        </div>
+                        
+                        
+                        <div class="cart-action text-end">
+                            <a href="/user/products/placeorder" class="btn"><i class="fi-rs-shopping-bag mr-10"></i>Proceed To Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const couponCodeInput = document.getElementById('couponCode');
+    const couponSelect = document.getElementById('couponSelect');
+    const applyCouponBtn = document.getElementById('applyCouponBtn');
+    const cartTotalElement = document.getElementById('cart-total');
+    const cartTotal = parseFloat(cartTotalElement.textContent);
+
+    // Fetch all coupons from the server
+    fetch(`/admin/coupons/all`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                // Add each coupon as an option in the selection box
+                data.forEach(coupon => {
+                    const option = document.createElement('option');
+                    option.value = coupon.couponName;
+                    option.textContent = `${coupon.couponName} - ${coupon.description}`;
+                    
+                    // Add appropriate CSS class based on matching criteria
+                    if (parseFloat(coupon.purchaseAmount) <= cartTotal && coupon.status === 'Active') {
+                        option.classList.add('green');
+                    } else {
+                        option.classList.add('red');
+                        option.disabled = true; // Disable red-colored options
+                    }
+                    
+                    couponSelect.appendChild(option);
+                });
+            } else {
+                // No coupons found
+                couponSelect.innerHTML = '<option value="">No coupons found</option>';
+                applyCouponBtn.disabled = true; // Disable apply button if no coupons found
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching coupons:', error);
+        });
+
+    // // Event listener for applying coupon when clicking on the apply button
+    // applyCouponBtn.addEventListener('click', function () {
+    //     const selectedCouponCode = couponSelect.value;
+    //     if (selectedCouponCode) {
+    //         // Fetch the coupon details
+    //         fetch(`/admin/coupons/${selectedCouponCode}`)
+    //             .then(response => response.json())
+    //             .then(coupon => {
+    //                 // Calculate the discounted total
+    //                 const discountPercentage = coupon.discountPercentage / 100;
+    //                 const discountedTotal = cartTotal - (cartTotal * discountPercentage);
+
+    //                 // Update the cart total displayed on the page
+    //                 cartTotalElement.textContent = discountedTotal.toFixed(2);
+
+    //                 // Optionally, you can display a message to the user indicating that the coupon has been applied
+    //                 alert(`Coupon applied successfully! Your discounted total is ${discountedTotal.toFixed(2)}`);
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching coupon details:', error);
+    //             });
+    //     } else {
+    //         alert('Please select a coupon.');
+    //     }
+    // });
+
+    // // Rest of your client-side code...
+});
+
+
+</script>
+<script>
+  
+    document.addEventListener('DOMContentLoaded', function () {
+        const applyCouponForm = document.getElementById('applyCouponForm');
+        const couponSelect = document.getElementById('couponSelect');
+        const cartTotalElement = document.getElementById('cart-total');
+
+        applyCouponForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const selectedCouponCode = couponSelect.value;
+            const cartSubtotal = parseFloat(cartTotalElement.textContent); // Get the cart subtotal
+
+            if (!isNaN(cartSubtotal)) { // Check if cartSubtotal is valid
+                if (selectedCouponCode) {
+                    // Send an HTTP POST request to apply the coupon
+                    fetch('/admin/coupon/apply', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ couponCode: selectedCouponCode, cartSubtotal: cartSubtotal }), // Include cartSubtotal in the request body
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to apply coupon.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.totalPrice !== undefined) {
+                            // Update the total price on the frontend
+                            cartTotalElement.textContent = data.totalPrice;
+                            alert('Coupon applied successfully!');
+                        } else {
+                            throw new Error('Failed to apply coupon.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error applying coupon:', error);
+                        alert(error.message || 'Failed to apply coupon.');
+                    });
+                } else {
+                    alert('Please select a coupon.');
+                }
+            } else {
+                alert('Invalid cart subtotal.');
+            }
+        });
+    });
+</script>
+
+</script>
+
+</html>

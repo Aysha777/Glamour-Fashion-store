@@ -1,0 +1,143 @@
+<%- include('layout/header') %>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+
+<style>
+  /* Styles to create a fixed position form */
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling */
+    height: 100%;
+  }
+
+  .signup-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #BCE0F5;
+  }
+
+  .card {
+    border-radius: 0;
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .card-body {
+    padding: 40px;
+  }
+
+  .signup-footer {
+    margin-top: 20px;
+  }
+
+  .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+      margin-left: 0%;
+    }
+</style>
+
+<section class="signup-section">
+  <div class="card shadow-2-strong">
+    <div class="card-body text-center">
+      <h3 class="mb-5">Sign Up</h3>
+
+      <form action="/user/registration" method="post" onsubmit="return validateForm()">
+        <div class="form-outline mb-4">
+          <input placeholder="Name" type="text" name="name" id="name" class="form-control form-control-lg" required style="border-radius: 0;">
+          <div id="nameError" class="error-message"></div> 
+
+        </div>
+
+        <div class="form-outline mb-4">
+          <input placeholder="Email" type="email" name="email" id="typeEmailX-2" class="form-control form-control-lg" required style="border-radius: 0;">
+          <div id="emailError" class="error-message"></div> <!-- Error message for Email -->
+
+        </div>
+
+        <div class="form-outline mb-4">
+          <input placeholder="Mobile Number" type="tel" name="mobile" id="mobile" class="form-control form-control-lg" required style="border-radius: 0;">
+          <div id="mobileError" class="error-message"></div> <!-- Error message for Mobile -->
+
+        </div>
+
+        <div class="form-outline mb-4">
+          <input placeholder="Password " type="password" name="password" id="typePasswordX-2" class="form-control form-control-lg" required style="border-radius: 0;">
+          <div id="passwordError" class="error-message"></div> <!-- Error message for Password -->
+
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block w-100" style="background-color: #45A8E1;border-radius: 0;" type="submit" >Submit</button>
+        <div class="signup-footer">
+          <p>Already have an account? <a href="/login">Login</a></p>
+        </div>
+      </form>
+
+      <!-- Display success/error message -->
+      <% 
+      if(typeof message !== 'undefined'){ 
+        %>
+        <p style="color: green;"><%= message%> </p>
+        <%
+      }
+      %>
+    </div>
+  </div>
+</section>
+
+<%- include( 'layout/footer') %>
+
+<script>
+  function validateForm() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('typeEmailX-2').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const password = document.getElementById('typePasswordX-2').value.trim();
+    let isValid = true; // Flag to track form validity
+
+    // Reset previous error messages
+    document.getElementById('nameError').innerHTML = '';
+    document.getElementById('emailError').innerHTML = '';
+    document.getElementById('mobileError').innerHTML = '';
+    document.getElementById('passwordError').innerHTML = '';
+
+    if (!name) {
+      document.getElementById('nameError').innerHTML = 'Name is required';
+      isValid = false;
+    }
+
+    if (!email) {
+      document.getElementById('emailError').innerHTML = 'Email is required';
+      isValid = false;
+    }
+
+    if (!mobile) {
+      document.getElementById('mobileError').innerHTML = 'Mobile number is required';
+      isValid = false;
+    } else if (mobile.length !== 10) {
+      document.getElementById('mobileError').innerHTML = 'Mobile number should be 10 digits';
+      isValid = false;
+    }
+
+    if (!password) {
+      document.getElementById('passwordError').innerHTML = 'Password is required';
+      isValid = false;
+    } else if (password.length < 8) {
+      document.getElementById('passwordError').innerHTML = 'Password should be at least 8 characters long';
+      isValid = false;
+    }
+
+    // Additional validation logic can be added here
+
+    // Form is valid, proceed with submission
+    return isValid;
+  }
+</script>

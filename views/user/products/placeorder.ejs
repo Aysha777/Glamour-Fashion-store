@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Billing Details Page </title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-o0rMR3DW9X0ZZG7+U5fB9Ff4cBIyqNXacV0VQ3LG5aY53hVsqpNMr23dWPLNF2Bi" crossorigin="anonymous">
+
+
+    <style>
+        body {
+            height: 100%;
+            overflow: scroll;
+        }
+
+        .main {
+            padding: 50px 0;
+        }
+
+        .breadcrumb-wrap {
+            background-color: #f5f5f5;
+            padding: 20px 0;
+        }
+
+        .breadcrumb {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .table th {
+            border-top: 1px solid #45A8E1; /* Add this line to create a border before each table header */
+        }
+        .table tr {
+            border-bottom: 1px solid #45A8E1; /* Add this line to create a border after every row */
+        }
+
+        .product-thumbnail img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-name a {
+            color: #333;
+        }
+
+        .price span {
+            color: #45A8E1;
+        }
+
+        .detail-qty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-down,
+        .qty-up {
+            cursor: pointer;
+            color: #333;
+        }
+
+        .action {
+            color: #888;
+        }
+
+        .cart-action {
+            margin-top: 20px;
+        }
+
+        .cart-action a {
+            margin-right: 10px;
+        }
+
+        .cart-action .btn {
+            background-color: #45A8E1;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom_select {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    }
+
+    .billing-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+.select-active {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.select-active:focus {
+    outline: none;
+    border-color: #007bff; /* Change the border color on focus */
+}
+
+/* Style the arrow icon */
+.select-active:after {
+    content: '\25BC'; /* Unicode character for down arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #555;
+}
+
+/* Style the options in the dropdown */
+.select-active option {
+    padding: 10px;
+}
+
+/* Style the dropdown when active */
+.select-active + .custom_select:after {
+    content: '\25B2'; /* Unicode character for up arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #555;
+    pointer-events: none;
+}
+
+        .cart-action .btn:hover {
+            background-color: #333;
+        }
+    
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .custome-checkbox {
+            margin-right: 10px;
+        }
+
+        .ship_detail {
+            margin-top: 20px;
+        }
+
+        .chek-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .different_address {
+            margin-top: 20px;
+        }
+
+        /* Optional: Style for collapsing elements */
+        .collapse {
+            display: none;
+        }
+
+        .collapse.in {
+            display: block;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+
+        h5 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .icon-space {
+        margin-right: 5px; /* Adjust the value to increase or decrease the space */
+    }
+    </style>
+</head>
+
+<!-- ... (previous HTML code) ... -->
+
+<body style="height: 100%; overflow: scroll;">
+
+    <%- include('../partials/user-header') %>
+<main class="main">
+   
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="divider mt-50 mb-50"></div>
+                </div>
+            </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="billing-card mb-4">
+                    <h4 class="mb-3">Billing Details</h4>
+                    <div class="form-group">
+                        <label for="savedAddresses">Select a Saved Address:</label>
+                        <select id="savedAddresses" class="form-control">
+                            <option value="">Select an address</option>
+                            <!-- Populate this dropdown with saved addresses using server-side rendering -->
+                        </select>
+                    </div>
+                    
+                    <form method="post" action="/user/products/placeorder" onsubmit="console.log('Form submitted!')">
+                        <div class="form-group">
+                        <input type="text" required="" name="fname" id="firstName" placeholder="First name *" style="width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box;">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" required="" name="lname" id="lastName" placeholder="Last name *" style="width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box;">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="cname" id="companyName" placeholder="Company Name" style="width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box;">
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <input type="text" name="billing_address" id="billingName"required="" placeholder="Address *">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="billing_address2" id="billingName2" required="" placeholder="Address line2">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="city" id="cityName" placeholder="City / Town *">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="state" id="stateName" placeholder="State / County *">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="zipcode" id="zipcodeName" placeholder="Postcode / ZIP *">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="phone" id="phoneName" placeholder="Phone *">
+                    </div>
+                    <div class="form-group">
+                        <input required="" type="text" name="email" id="emailName" placeholder="Email address *">
+                    </div>
+                    
+                    <input type="hidden" id="selectedAddressId" name="selectedAddressId">
+
+                    
+                    
+                
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="order_review">
+                    <div class="billing-card mb-4">
+                        <h4 class="mb-3">Your Orders</h4>
+                        
+                    
+                            <div class="table-responsive order_table text-center">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        <% if (cart && cart.items && Array.isArray(cart.items)) { %>
+                                            <% const startIndex = (currentPage - 1) * 5; %>
+                                            <% const endIndex = startIndex + 5; %>
+                                            <% const paginatedItems = cart.items.slice(startIndex, endIndex); %>
+                                            <% paginatedItems.forEach(item => { %>
+                                            <tr>
+                                                <td >
+                                                    <% if (item.product && item.product.images && Array.isArray(item.product.images) && item.product.images.length > 0) { %>
+                                                    <img src="/uploads/<%= item.product.images[0] %>" alt="#" style="width: 50px; height: 50px; object-fit: contain;">
+                                                <% } else { %>
+                                                    <!-- Provide a default image or handle the case where there are no images -->
+                                                    <img src="/path/to/default/image.jpg" alt="#" style="width: 50px; height: 50px; object-fit: contain;">
+                                                <% } %>
+                                                </td>
+                                                <td class="product-des product-name" style="vertical-align: middle;">
+                                                    <h5 class="product-name" style="font-size: 12px;"><a href="<%= '/shop-product-right/' + item.product._id %>"><%= item.product.product_title %></a></h5>
+                                                </td>
+                                                <td><% if (item.product && typeof item.product.price === 'number') { %>
+                                                    <span style="font-size: 14px;">$<%= item.product.price.toFixed(2) %></span>
+                                                <% } else { %>
+                                                    <span style="font-size: 14px;">N/A</span> <!-- or any default value you prefer -->
+                                                <% } %>
+                                                </td>
+                                            </tr>
+                                         <% }); %>
+                                    <% } else { %>
+                                    <tr>
+                                        <td colspan="3">Your cart is empty</td>
+                                    </tr>
+                                    <% } %>
+                                    </tbody>
+                                    
+                                    <tfoot style="font-weight: bold; font-size: 16px;">
+                                        <tr>
+                                            <th style="color: #333;">SubTotal</th>
+                                            <td class="text-right main-heading" data-title="Total" style="color: #45A8E1;">
+                                                <span id="cart-total"><%= subtotal %></span>
+                                            </td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <th style="color: #333;">Shipping</th>
+                                            <td class="text-right main-heading" colspan="2"><em style="font-style: italic; color: #666;">Free Shipping</em></td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <th style="color: #333;">Discount Percentage:</th>
+                                            <td class="text-right main-heading" style="color: #45A8E1;"><%= discountPercentage %> %</td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <th style="color: #333;">Discounted Amount</th>
+                                            <td class="text-right main-heading" style="color: #45A8E1;"><%= discountedAmount.toFixed(2) %></td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <th style="color: #333;">Discounted Total</th>
+                                            <td class="text-right main-heading" style="color: #45A8E1;"><%= discountedTotal.toFixed(2) %></td>
+                                        </tr>
+                                    
+                                        <!-- Display coupon code -->
+                                        <tr>
+                                            <th style="color: #333;">Coupon Code:</th>
+                                            <td class="text-right main-heading" style="color: #45A8E1;"><b><%= couponCode %></b></td>
+                                        </tr>
+                                    
+                                        <tr>
+                                            <th style="color: #333;"><b>Total</b></th>
+                                            <td class="text-right main-heading" data-title="Total" style="color: #45A8E1;">
+                                                <span id="cart-total"><%= subtotal %></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                                                        
+                                </table>
+                                <ul class="pagination">
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                                            <a class="page-link" href="/user/products/placeorder?page=<%= i %>"><%= i %></a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </div>
+                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                            <div class="payment_method" style="margin-left: 10%;">
+                                <div class="mb-25">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option" id="cod" value="cash_on_delivery" checked>
+                                        <label class="form-check-label" for="cod">Cash On Delivery</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option" id="onlinepayment" value="online_payment">
+                                        <label class="form-check-label" for="onlinepayment">Online Payment</label>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+                            <button id="rzp-button" type="submit" class="btn btn-fill-out btn-block mt-30" style="color: #ffffff;background-color: #45A8E1;">Place Order</button>
+                        </form>
+                        </div>
+                        <!-- <button id="rzp-button">Pay with Razorpay</button> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </section>
+        </main>
+        <script>
+            console.log('Script loaded');
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOMContentLoaded event fired');
+                const savedAddressesDropdown = document.getElementById('savedAddresses');
+                const firstNameInput = document.getElementById('firstName');
+                const lastNameInput = document.getElementById('lastName');
+                const companyNameInput = document.getElementById('companyName');
+                const billingAddressInput = document.getElementById('billingName');
+                const billingAddress2Input = document.getElementById('billingName2');
+                const cityInput = document.getElementById('cityName');
+                const stateInput = document.getElementById('stateName');
+                const zipcodeInput = document.getElementById('zipcodeName');
+                const phoneInput = document.getElementById('phoneName');
+                const emailInput = document.getElementById('emailName');
+
+
+                // Add event listener to the select element
+                savedAddressesDropdown.addEventListener('change', function(event) {
+                    // Get the selected option
+                    const selectedOption = event.target.options[event.target.selectedIndex];
+                    // Extract the address details from the option's value
+                    const addressDetails = selectedOption.value.split(',');
+                    // Populate other fields with the extracted details
+                    firstNameInput.value = addressDetails[1];
+                    lastNameInput.value = addressDetails[2];
+                    companyNameInput.value = addressDetails[3];
+                    billingAddressInput.value = addressDetails[4];
+                    billingAddress2Input.value = addressDetails[5];
+                    cityInput.value = addressDetails[6];
+                    stateInput.value = addressDetails[7];
+                    zipcodeInput.value = addressDetails[8];
+                    phoneInput.value = addressDetails[9];
+                    emailInput.value = addressDetails[10];
+
+                    const selectedAddressId = addressDetails[0];
+                    document.getElementById('selectedAddressId').value = selectedAddressId;
+                    // Similarly, populate other fields with the remaining details
+                });
+        
+                // Fetch saved addresses from the server
+                fetch('/addresses')
+                    .then(response => response.text())
+                    .then(options => {
+                        console.log('Fetched options:', options);
+                        // Populate the dropdown menu with the fetched addresses
+                        savedAddressesDropdown.innerHTML = options;
+                    })
+                    .catch(err => {
+                        console.error('Error fetching saved addresses:', err);
+                    });
+            });
+        </script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        
+        <script>
+            // Configure Razorpay button
+            var options = {
+                "key": "rzp_test_U1JmNHMDoFIk7I",
+                "amount": "<%= totalPrice %>", // Amount in paise (e.g., 10000 paise = ₹100)
+                "currency": "INR",
+                "name": "Your Company qqqqqqq",
+                "description": "Purchase Description",
+                "image": "https://example.com/your_logo.png", // Your company logo
+                "handler": function (response){
+                    alert("Payment successful. Payment ID: " + response.razorpay_payment_id);
+                    // You can perform further actions here, such as updating the order status in your backend
+                },
+                "prefill": {
+                    "name": "John Doe", // Customer name
+                    "email": "john@example.com", // Customer email
+                    "contact": "9876543210" // Customer phone number
+                },
+                "theme": {
+                    "color": "#528FF0" // Customize button color
+                }
+            };
+        
+            var rzpButton = document.getElementById("rzp-button");
+        
+            // rzpButton.onclick = function(){
+            //     // Open Razorpay checkout form when button is clicked
+            //     var rzp = new Razorpay(options);
+            //     rzp.open();
+            // };
+        </script>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+        <script>
+            function useSavedAddress(selectElement) {
+                var selectedAddressId = selectElement.value;
+                if (selectedAddressId !== "") {
+                    // Fetch the selected address details based on its ID
+                    var selectedAddress = savedAddresses.find(address => address.id === selectedAddressId);
+                    // Populate the form fields with the selected address details
+                    document.getElementById('street').value = selectedAddress.street;
+                    document.getElementById('city').value = selectedAddress.city;
+                    document.getElementById('country').value = selectedAddress.country;
+                    // Populate other address fields similarly
+                }
+            }
+        </script>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+        <script>
+            $(document).ready(function(){
+                $('.pay-form').submit(function(e){
+                    e.preventDefault();
+            
+                    var formData = $(this).serialize();
+            
+                    $.ajax({
+                        url: "/createOrder",
+                        type: "POST",
+                        data: formData,
+                        success: function(res){
+                            if(res.success){
+                                if(res.payment_option === "online_payment") {
+                                    // Open Razorpay payment form
+                                    var options = {
+                                        key: res.razorpay_key,
+                                        amount: res.amount,
+                                        currency: res.currency,
+                                        order_id: res.order_id,
+                                        name: res.product_name,
+                                        description: res.description,
+                                        image: res.image,
+                                        handler: function(response) {
+                                            // Handle successful payment
+                                            alert("Payment successful!");
+                                            window.location.href = "/user/products/success"; // Redirect to success page
+                                        },
+                                        prefill: {
+                                            name: res.prefill.name,
+                                            email: res.prefill.email,
+                                            contact: res.prefill.contact
+                                        },
+                                        theme: {
+                                            color: "#2300a3"
+                                        }
+                                    };
+            
+                                    var razorpayObject = new Razorpay(options);
+                                    razorpayObject.open();
+                                } else {
+                                    // Redirect to success page for other payment options
+                                    window.location.href = "/user/products/success";
+                                }
+                            } else {
+                                alert(res.msg);
+                            }
+                        }
+                    });
+                });
+            });
+            </script>
+            
+            
+    </body>
+        
+    </html>

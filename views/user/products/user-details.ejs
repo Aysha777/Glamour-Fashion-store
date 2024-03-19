@@ -1,0 +1,25 @@
+<!-- user-details.ejs -->
+<section>
+    <h2>User Details</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Attribute</th>
+                <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Email Address</td>
+                <td><%= user && user.email ? user.email : 'N/A' %></td>
+            </tr>
+            <tr>
+                <td>Mobile Number</td>
+                <td><%= user && user.mobile ? user.mobile : 'N/A' %></td>
+            </tr>
+            <!-- Add more rows for other user attributes -->
+        </tbody>
+    </table>
+    
+</section>
+</body>

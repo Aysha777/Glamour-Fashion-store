@@ -1,0 +1,138 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your view product</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
+        .container {
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="date"] {
+            width: calc(100% - 24px); /* Adjust input width */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #1ec9eb;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="container">
+            <div class="card">
+                <h1 style="text-align: center;">Create Coupon</h1>
+                <form id="createCouponForm" action="/admin/createCoupon" method="POST" onsubmit="return validateForm()">
+                    <label for="purchaseAmount">Purchase Amount Threshold:</label>
+                    <input type="number" id="purchaseAmount" name="purchaseAmount" required>
+                    <label for="discountPercentage">Discount Percentage:</label>
+                    <input type="number" id="discountPercentage" name="discountPercentage" required>
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" required>
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status" required>
+                    <!-- Coupon name is generated dynamically -->
+                    <input type="hidden" id="couponName" name="couponName">
+                    <button type="submit">Generate Coupon</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function validateForm() {
+        var purchaseAmount = document.getElementById("purchaseAmount").value;
+        var discountPercentage = document.getElementById("discountPercentage").value;
+        var description = document.getElementById("description").value;
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+        var status = document.getElementById("status").value;
+
+        // Check if purchase amount and discount percentage are valid numbers and not negative
+        if (isNaN(purchaseAmount) || isNaN(discountPercentage) || purchaseAmount < 0 || discountPercentage < 0) {
+            alert("Purchase Amount and Discount Percentage must be valid positive numbers");
+            return false;
+        }
+
+        // Check if description is not empty
+        if (description.trim() === "") {
+            alert("Please enter a description");
+            return false;
+        }
+
+        // Validate start date and end date
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("End date must be after start date");
+            return false;
+        }
+
+        // Check if status is not empty
+        if (status.trim() === "") {
+            alert("Please enter a status");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    
+}
+
+
+.main-content {
+    margin-left: 200px; /* Adjust this value to match the width of the sidebar */
+    padding: 20px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
+.user-profile-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.user-profile-card .card-header {
+    background-color: #45A8E1;
+    color: #fff;
+    padding: 15px 20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.user-profile-card .card-body {
+    padding: 20px;
+}
+
+.user-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-details-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-details-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Optional: Add hover effect on table rows */
+.user-details-table tr:hover {
+    background-color: #BCE0F5;
+}
+
+.billing-details-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.billing-details-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.billing-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.billing-details-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.billing-details-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Optional: Add hover effect on table rows */
+.billing-details-table tr:hover {
+    background-color: #BCE0F5;
+}
+
+/* Style for the card */
+.cardo {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Style for the card header */
+.card-headero {
+    background-color: #ffff;
+    color: #000000;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 6px 6px 0 0;
+}
+
+/* Style for the card body */
+.card-bodyo {
+    padding: 20px;
+}
+
+/* Style for the table */
+.tableo {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Style for table headers */
+.tableo th {
+    padding: 12px;
+    text-align: left;
+    background-color: #f2f2f2;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Style for table data */
+.tableo td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Style for table data in the first column */
+.tableo td:first-child {
+    font-weight: bold;
+}
+
+/* Style for table rows when hovering */
+.tableo tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Style for the button */
+.btn-small {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+/* Style for the button on hover */
+.btn-small:hover {
+    background-color: #0056b3;
+}
+
+/* Center the button text */
+.btn-small.d-block {
+    text-align: center;
+}.product-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image-box {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-details {
+    flex-grow: 1;
+}
+
+.product-name {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.product-price {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+}
+
+.view-details {
+    padding: 8px 16px;
+    background-color: #BCE0F5;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.view-details:hover {
+    background-color: #45A8E1;
+}
+
+.carde {
+    border: 1px solid #ddd; /* Add a border */
+    border-radius: 8px; /* Add some border radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    margin-bottom: 20px; /* Add some spacing between cards */
+}
+
+.card-headere {
+    background-color: #f8f9fa; /* Light gray background color for the header */
+    padding: 10px 20px; /* Add padding */
+    border-bottom: 1px solid #ddd; /* Add a bottom border */
+}
+
+.card-headere h5 {
+    margin: 0; /* Remove margin */
+    font-size: 18px; /* Increase font size */
+}
+
+.card-bodye {
+    padding: 20px; /* Add padding */
+}
+
+.form-groupe {
+    margin-bottom: 20px; /* Add spacing between form groups */
+}
+
+.form-controle {
+    border-radius: 4px; /* Add border radius to form inputs */
+}
+
+.required {
+    color: red; /* Set color for required indicator */
+}
+
+.btn-fill-out {
+    background-color: #BCE0F5; /* Blue background color for buttons */
+    color: #fff; /* White text color */
+    border-radius: 4px; /* Add border radius */
+    padding: 10px 20px; /* Add padding */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.btn-fill-out:hover {
+    background-color: #45A8E1; /* Darker blue background color on hover */
+}
+
+.submit {
+    width: 50%; /* Make the button full width */
+}
+
+/* Optional: Add styles for the link inside the paragraph */
+.card-bodye p a {
+    color: #007bff; /* Blue text color for the link */
+    text-decoration: none; /* Remove underline */
+}
+
+.card-bodye p a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+.image-box {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.image-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+</style>
+<body>
+    
+    <%- include('../partials/user-side') %>
+    
+
+    <main>
+        
+
+    <div class="main-content">
+       
+
+        <div class="section" id="user-details">
+            <div class="card user-profile-card">
+                <div class="card-header">
+                    <h1>User Profile</h1>
+                </div>
+                <div class="card-body">
+                    <table class="user-details-table">
+                        <tr>
+                            <td>Email:</td>
+                            <td><%= user.email %></td>
+                        </tr>
+                        <tr>
+                            <td>Name:</td>
+                            <td><%= user.name %></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile:</td>
+                            <td><%= user.mobile %></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="addresses" class="section hidden">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-3 mb-lg-0">
+                        <div class="card-header">
+                           
+                        </div>
+                        <div class="card-body">
+                            <h2 class="billing-details-title">Billing Details</h2>
+                            <div class="billing-details-card">
+                                <table class="billing-details-table">
+                                    <% if (order && order.billingDetails) { %>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td><%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td><%= order.billingDetails.billingAddress %>, <%= order.billingDetails.city %>, <%= order.billingDetails.state %> <%= order.billingDetails.zipcode %></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td><%= order.billingDetails.email %></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone:</td>
+                                        <td><%= order.billingDetails.phone %></td>
+                                    </tr>
+                                    <% } %>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="orders" class="section">
+            <div class="cardo">
+                <div class="card-headero">
+                    <h5 class="mb-0">Your Orders</h5>
+                </div>
+                <div class="card-bodyo">
+                    <div class="order-list">
+                        <% if (ordersList && ordersList.length > 0) { %>
+                            <% ordersList.forEach(function(order) { %>
+                                <div class="order">
+                                    <h5 class="order-id">Order ID: <%= order._id %></h5>
+                                    <h5 class="order-id">Status: <%= order.orderStatus %></h5>
+
+                                    <div class="grid-container">
+                                        <% if (order.items && order.items.length > 0) { %>
+                                            <% order.items.forEach(function(item) { %>
+                                                <div class="card product-item">
+                                                    <div class="image-box">
+                                                        <% if (item.productImage && item.productImage.length > 0) { %>
+                                                            <% item.productImage.forEach(function(image) { %>
+                                                                <img src="/uploads/<%= image %>" alt="Product Image" class="product-image">
+                                                            <% }); %>
+                                                        <% } else { %>
+                                                            <p class="no-image">No image available</p>
+                                                        <% } %>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h3 class="product-name"><%= item.product.name %></h3>
+                                                        <button onclick="window.location.href='/product/<%= order._id %>/<%= item._id %>'" class="btn-small view-details">
+                                                            View Details <i class="fas fa-chevron-right"></i>
+                                                        </button>
+                                                      
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        <% } else { %>
+
+                                            <p class="no-items">No items found</p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="no-orders">No orders found</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="add-address" class="section hidden">
+            <!-- Add Address section -->
+        </div>
+
+        <div id="edit-profile" class="section hidden">
+            <div class="carde">
+                <div class="card-headere">
+                    <h5>Change Password </h5>
+                </div>
+                <div class="card-bodye">
+                    <% if (message) { %>
+                        <div class="alert alert-info">
+                            <%= message %>
+                        </div>
+                    <% } %>
+                    <form method="post" name="enq" action="/change-password">
+                        <div class="row">
+                            
+                            <div class="form-groupe col-md-12">
+                                <label>Email Address <span class="required">*</span></label>
+                                <input required="" class="form-control square" name="email" type="email">
+                            </div>
+                            <div class="form-groupe col-md-12">
+                                <label>Current Password <span class="required">*</span></label>
+                                <input required="" class="form-control square" name="password" type="password">
+                            </div>
+                            <div class="form-groupe col-md-12">
+                                <label>New Password <span class="required">*</span></label>
+                                <input required="" class="form-control square" name="npassword" type="password">
+                            </div>
+                            <div class="form-groupe col-md-12">
+                                <label>Confirm Password <span class="required">*</span></label>
+                                <input required="" class="form-control square" name="cpassword" type="password">
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="logout" class="section hidden">
+            <form action="/logout" method="post" class="d-grid">
+                <button type="submit" class="btn ">Logout</button>
+            </form>
+        </div>
+
+        <div id="forgot-password" class="section hidden">
+            <!-- Forgot Password section -->
+        </div>
+    </div>
+    </main>
+    <script src="scripts.js"></script>
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            selectedSection.classList.remove('hidden');
+
+            // Fetch and display user details if the user details section is selected
+            if (sectionId === 'user-details') {
+                fetchUserDetails();
+            }
+
+            // Fetch and display order details if the orders section is selected
+            if (sectionId === 'orders') {
+                fetchOrderDetails();
+            }
+        }
+
+        async function fetchUserDetails() {
+            try {
+                // Make a request to the server to fetch user details
+                const response = await fetch('/user/profile');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user details');
+                }
+
+                // Parse the response JSON
+                const userDetails = await response.json();
+
+                // Display user details
+                document.getElementById('user-email').textContent = userDetails.email;
+                document.getElementById('user-name').textContent = userDetails.name;
+                document.getElementById('user-mobile').textContent = userDetails.mobile;
+
+                // Display billing details
+                const billingDetailsContent = document.getElementById('billing-details-content');
+                billingDetailsContent.innerHTML = `
+                    <table>
+                        <tr>
+                            <td>Name:</td>
+                            <td>${userDetails.billingDetails.firstName} ${userDetails.billingDetails.lastName}</td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td>${userDetails.billingDetails.billingAddress}, ${userDetails.billingDetails.city}, ${userDetails.billingDetails.state} ${userDetails.billingDetails.zipcode}</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>${userDetails.billingDetails.email}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td>${userDetails.billingDetails.phone}</td>
+                        </tr>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        }
+
+        
+        async function fetchOrderDetails() {
+    try {
+        const response = await fetch('/user/orders');
+        if (!response.ok) {
+            throw new Error('Failed to fetch order details');
+        }
+
+        const orderDetails = await response.json();
+
+        const ordersSection = document.getElementById('order-details');
+        ordersSection.innerHTML = ''; // Clear existing content
+
+        if (orderDetails.length > 0) {
+            orderDetails.forEach(order => {
+                const orderDiv = document.createElement('div');
+                orderDiv.innerHTML = `
+                    <h2>Order ${order._id}</h2>
+                    <h3>Items</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${order.items.map(item => `
+                                <tr>
+                                    <td>${item.product.name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>$${item.subtotal}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <h3>Billing Details</h3>
+                    <table>
+                        <tr>
+                            <td>Name:</td>
+                            <td>${order.billingDetails.firstName} ${order.billingDetails.lastName}</td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td>${order.billingDetails.billingAddress}, ${order.billingDetails.city}, ${order.billingDetails.state} ${order.billingDetails.zipcode}</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>${order.billingDetails.email}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td>${order.billingDetails.phone}</td>
+                        </tr>
+                    </table>
+                    <h3>Total Price</h3>
+                    <p>$${order.totalPrice}</p>
+                `;
+                ordersSection.appendChild(orderDiv);
+            });
+        } else {
+            ordersSection.innerHTML = '<p>No orders found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+    }
+}
+
+
+
+    </script>
+</body>
+</html>

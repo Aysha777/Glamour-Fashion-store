@@ -1,0 +1,12 @@
+<!-- userAddresses.ejs -->
+
+<h2>Addresses</h2>
+<% if (user.addresses.length > 0) { %>
+  <ul>
+    <% user.addresses.forEach(function(address) { %>
+      <li><%= address %></li>
+    <% }); %>
+  </ul>
+<% } else { %>
+  <p>No addresses added yet.</p>
+<% } %>

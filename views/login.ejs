@@ -1,0 +1,82 @@
+<%- include('layout/header') %>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+
+<section class="vh-100" style="background-color: #ffffff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 40px;">
+                    <div class="card-body p-5 text-center" style="border-radius: 40px; background-color: #BCE0F5">
+
+                        <h3 class="mb-5">Login</h3>
+                        <form action="/login" method="post" onsubmit="return validateForm()">
+                            <div class="form-outline mb-4">
+                                <input placeholder="email" type="email" name="email" id="typeEmailX-2" class="form-control form-control-lg" style="border-radius: 0;" />
+                                <small id="emailError" style="color: red; display: none;">Email is required</small>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" placeholder="password (min. 8 characters)" name="password" id="typePasswordX-2" class="form-control form-control-lg" style="border-radius: 0;" />
+                                <small id="passwordError" style="color: red; display: none;">Password is required and should be at least 8 characters</small>
+                            </div>
+                            <button class="btn btn-primary btn-lg btn-block w-100" style="background-color: #45A8E1;border-radius: 0;" type="submit">Login</button>
+                            <br><br>
+                            <div class="login_footer form-group">
+                                <p>Don't have an account! <a href="/registration">Register</a></p>
+
+                                <p><a href="/forgetpassword">Forgot Password?</a></p>
+
+                            </div>
+                            <div>
+                                <% 
+                        if(typeof message !== 'undefined'){ 
+                          %>
+                          <p style="color: green;"><%= message%> </p>
+                          <%
+                        }
+                        %>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('layout/footer') %>
+
+<script>
+    function validateForm() {
+        const email = document.getElementById('typeEmailX-2').value.trim();
+        const password = document.getElementById('typePasswordX-2').value.trim();
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            document.getElementById('emailError').style.display = 'block';
+            return false;
+        } else if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = 'Please enter a valid email';
+            document.getElementById('emailError').style.display = 'block';
+            return false;
+        } else {
+            document.getElementById('emailError').style.display = 'none';
+        }
+
+        if (!password || password.length < 8) {
+            document.getElementById('passwordError').style.display = 'block';
+            return false;
+        } else {
+            document.getElementById('passwordError').style.display = 'none';
+        }
+
+        // Other validations can be added similarly
+
+        // Form is valid, proceed with submission
+        return true;
+    }
+</script>

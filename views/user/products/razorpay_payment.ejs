@@ -1,0 +1,72 @@
+<!-- razorpay_payment.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+</head>
+<body>
+    <h1>Payment</h1>
+    <div id="razorpay-container">
+        <!-- Razorpay payment button will be rendered here -->
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const orderCreatedId = "<%= orderCreatedId %>"
+        // Configure Razorpay button
+        var options = {
+            "key": "<%= razorpayKeyId %>",
+            "amount": "<%= totalPrice %>", // Amount in paise (e.g., 10000 paise = ₹100)
+            "currency": "INR",
+            "name": "Your Company ddgfddfgdfgdfgdf ",
+            "description": "Purchase Description",
+            "image": "https://example.com/your_logo.png", // Your company logo
+            "handler": async function (response){
+                // orderCreatedId
+                const data = await fetch('http://localhost:3006/user/products/placeorder/confirm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderCreatedId: orderCreatedId
+                    })
+                }).then((response)=>response.json());
+
+                alert(JSON.stringify(data))
+                    // Payment successful, perform necessary actions
+                    alert('Payment successful. Payment ID: ' + response.razorpay_payment_id);
+            },
+            "prefill": {
+                "name": "<%= fname %> <%= lname %>", // Customer name
+                "email": "<%= email %>", // Customer email
+                "contact": "<%= phone %>" // Customer phone number
+            },
+            "theme": {
+                "color": "#528FF0" // Customize button color
+            }
+        };
+    
+        // Render Razorpay payment button
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', async function (response){
+            const data = await fetch('http://localhost:3006/user/products/placeorder/reject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderCreatedId: orderCreatedId
+                    })
+                }).then((response)=>response.json());
+
+                alert(JSON.stringify(data))
+            });
+        rzp.open();
+
+    </script>
+</body>
+</html>

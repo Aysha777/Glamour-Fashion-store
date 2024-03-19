@@ -1,0 +1,89 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/"><img src="/imgs/logo/lg.jpg" alt="logo" style="max-height: 35px; margin: 0; padding: 0;"></a>
+
+            <!-- Toggler/collapsible Button for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <!-- Menu Items with Dropdowns -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Men</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            <li><a class="dropdown-item" href="/user/products/Tshirts">Tshirts</a></li>
+                            <li><a class="dropdown-item" href="/user/products/Shirts">Shirts</a></li>
+                            <li><a class="dropdown-item" href="/user/products/Jeans">Jeans</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Women</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                            <li><a class="dropdown-item" href="/user/products/Tshirtw">Tshirts</a></li>
+                            <li><a class="dropdown-item" href="/user/products/Kurties">Kurties</a></li>
+                            <li><a class="dropdown-item" href="/user/products/jeansw">Jeans</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kids</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                            <li><a class="dropdown-item" href="/user/products/Tshirtk">Tshirts</a></li>
+                            <li><a class="dropdown-item" href="/user/products/Sweatshirts">Sweatshirts</a></li>
+                            <li><a class="dropdown-item" href="/user/products/jeansk">Jeans</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-bs-toggle="dropdown" aria-expanded="false">Home & Furnishing</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                            <li><a class="dropdown-item" href="/user/products/bedsheets">Bedsheet</a></li>
+                            <li><a class="dropdown-item" href="/user/products/carpets">Carpets</a></li>
+                            <li><a class="dropdown-item" href="/user/products/doormates">Doormates</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown" aria-expanded="false">Beauty</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown5">
+                            <li><a class="dropdown-item" href="/user/products/lipstick">Lipstick</a></li>
+                            <li><a class="dropdown-item" href="/user/products/nailpolish">Nailpolish</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="d-flex" action="/search" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+
+                <!-- Icons (User Profile, Wishlist, Cart) -->
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <li>
+                                <form action="/logout" method="post" class="d-grid">
+                                    <button type="submit" class="btn ">Logout</button>
+                                </form>
+                            </li>
+                            <li><a class="dropdown-item" href="/user/products/user-profile">User Profile</a></li>
+                            <li><a class="dropdown-item" href="/signup">Sign Up</a></li>
+                            <li><a class="dropdown-item" href="/refer-friend">Refer a Friend</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/products/wishlist"><i class="fas fa-heart"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/products/cart"><i class="fas fa-shopping-cart"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

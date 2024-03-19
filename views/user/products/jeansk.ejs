@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #020202;
+        }
+        .table {
+            background-color: #ffffff;
+        }
+        .table th, .table td {
+            border-color: #dee2e6;
+        }
+        .btn-edit {
+            background-color: #007bff;
+            border-color: #06090c;
+        }
+        .btn-delete {
+            background-color: #007bff;
+            border-color: #0e1a26;
+        }
+
+        .btn-update {
+            background-color: #007bff;
+            border-color: #03080c;
+        }
+
+        .z-top {
+            z-index: 9999999999;
+        }
+        .text-danger {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('../partials/user-header') %>
+    <main class="main" style="margin-top: 90px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <h4>Filters</h4>
+                        <hr>
+                       
+                        <%- include ('../partials/filters') %>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row" id="products-container">  
+                        <% products.forEach(product => { %>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                                <div class="card">
+                                    <div class="card-img-container">
+                                        <% product.images.forEach(image => { %>
+                                            <img src="/uploads/<%= image %>" class="img-thumbnail" class="card-img-top" alt="<%= product.product_title %>">
+                                        <% }); %>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= product.brand %></h5>
+                                        <p class="card-title"><%= product.product_title %></p>
+                                        <h3 class="card-text">Price:  ₹ <%= product.price %></h3>
+                                        <a href="/pdtview/<%= product.id %>" class="btn btn-primary"  style="background-color: #45a8e1;">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+        
+    <div id="loader">
+    <div class="position-fixed top-0 w-0 h-100 w-100 bg-black d-flex align-items-center justify-content-center z-top">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('input[name="color"], input[name="brand"], input[name="price"]');
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', getFilteredProducts);
+        });
+
+        async function getFilteredProducts() {
+            console.log('Checkbox changed');
+            
+            const selectedColors = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(input => input.value);
+            const selectedBrand = Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(input => input.value);
+            const selectedPrice = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(input => input.value);
+            const subcategory = 'Jeans-kids';
+
+            const queryParams = new URLSearchParams();
+            if (selectedColors.length > 0) queryParams.append('color', selectedColors.join(','));
+            if (selectedBrand.length > 0) queryParams.append('brand', selectedBrand.join(','));
+            if (selectedPrice.length > 0) queryParams.append('price', selectedPrice.join(','));
+            queryParams.append('subcategory', subcategory);
+
+            try {
+                const response = await fetch(`/user/partials/filters?${queryParams.toString()}`);
+                console.log('Request URL:', `/user/partials/filters?${queryParams.toString()}`);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                displayProductImages(data.products);
+
+            } catch (error) {
+                console.error('Error:', error);
+                renderError(error.message); // Display the specific error message
+            }
+        }
+
+        function displayProductImages(products) {
+            const productsContainer = document.getElementById('products-container');
+            if (!productsContainer) {
+                console.error('Products container not found');
+                return;
+            }
+
+            // Clear previous products
+            productsContainer.innerHTML = '';
+
+            products.forEach(product => {
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('col-lg-4', 'col-md-6', 'col-sm-12', 'mb-4');
+
+                const imageCard = document.createElement('div');
+                imageCard.classList.add('card');
+
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('card-img-container');
+
+                // Add product images
+                product.images.forEach(image => {
+                    const img = document.createElement('img');
+                    img.src = `/uploads/${image}`;
+                    img.alt = product.product_title;
+                    img.classList.add('img-thumbnail', 'card-img-top');
+
+                    imageContainer.appendChild(img);
+                });
+
+                const cardBody = document.createElement('div');
+                cardBody.classList.add('card-body');
+
+                const brand = document.createElement('h5');
+                brand.classList.add('card-title');
+                brand.textContent = product.brand;
+
+                const title = document.createElement('p');
+                title.classList.add('card-title');
+                title.textContent = product.product_title;
+
+                const price = document.createElement('h3');
+                price.classList.add('card-text');
+                price.textContent = `Price: $${product.price}`;
+
+                const viewDetails = document.createElement('a');
+                viewDetails.href = `/product/${product.id}`;
+                viewDetails.classList.add('btn', 'btn-primary');
+                viewDetails.style.backgroundColor = '#45a8e1';
+                viewDetails.textContent = 'View Details';
+
+                cardBody.appendChild(brand);
+                cardBody.appendChild(title);
+                cardBody.appendChild(price);
+                cardBody.appendChild(viewDetails);
+
+                imageCard.appendChild(imageContainer);
+                imageCard.appendChild(cardBody);
+
+                imageDiv.appendChild(imageCard);
+                productsContainer.appendChild(imageDiv);
+            });
+        }
+
+        function renderError(message) {
+            const productsContainer = document.getElementById('products-container');
+            if (!productsContainer) {
+                console.error('Products container not found');
+                return;
+            }
+            productsContainer.innerHTML = `<p>${message}</p>`;
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+</body>
+</html>
+
+
+<%- include('../../layout/footer') %>

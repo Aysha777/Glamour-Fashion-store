@@ -1,0 +1,262 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
+    
+        <!-- Link your CSS file here -->
+        <link rel="stylesheet" type="text/css" href="/css/main.css">
+    
+        <!-- Additional styles or CDN links can be added here if needed -->
+    
+    </head>
+    <body>
+        <%- include('./partials/header') %>
+        <%- include('./partials/aside-nav') %>
+        <main class="main-wrap">
+            <%- include('./partials/admin-header') %>
+                <section class="content-main">
+                    <div class="content-header">
+                        <div>
+                            <h2 class="content-title card-title admin-dashboard-heading">Dashboard </h2>
+                            <p>Glamour Fashion Store</p>
+                        </div>
+                        <div>
+                            <a href="javascript:void(0)" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#datePickerModal">
+                                <i class="text-muted material-icons md-post_add"></i>Create Report
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Revenue</h6>
+                                        <p>Total Revenue: </p>
+                                            <p><b><h5> ₹<%= totalRevenue %></h5></b></p>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                            class="text-success material-icons md-local_shipping"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Orders</h6> <span>
+                                            <p>Total Orders: </p>
+                                            <p><b> <h5> <%= totalOrder %></h5></b></p> 
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-warning-light"><i
+                                            class="text-warning material-icons md-qr_code"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Products</h6> <span>
+                                            <p>Total Products: </p>
+                                            <p><b> <h5> <%= totalPdts %></h5></b></p> 
+
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-info-light"><i
+                                            class="text-info material-icons md-people"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Users</h6>             
+                                     
+                                        <p>Total Users: </p>
+                                            <p><b> <h5> <%= totalUsers %></h5></b></p> 
+
+                                        
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Monthly Earning</h6> 
+                                        <span><b> <h5> ₹<%= monthlyEarning.toFixed(2) %></b></h5></span> <!-- Display monthly earning -->
+                                        <span class="text-sm">
+                                            Based on your local time.
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Weekly Earning</h6> 
+                                        <span><b> <h5> ₹<%= weeklyEarning.toFixed(2) %></b></h5></span> <!-- Display weekly earning -->
+                                        <span class="text-sm">
+                                            Based on your local time.
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                            
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Daily Earning</h6> 
+                                        <span><b> <h5> ₹<%= dailyEarning.toFixed(2) %></b></h5></span> <!-- Display daily earning -->
+                                        <span class="text-sm">
+                                            Based on your local time.
+                                        </span>
+                                    </div>
+                                </article>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card mb-4">
+                                <article class="card-body">
+                                    <div class="card mb-4">
+                                        <article class="card-body">
+                                            <h5 class="card-title">Sale statistics</h5>
+                                            Use a unique ID for the canvas element
+                                            <!-- <canvas id="salesChart" height="300"></canvas>
+                                        </article>
+                                    </div> -->
+                                    <!-- <!-- <div class="dropdown ml-20">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                            id="filterDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Choose Filter
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="filterDropdownButton">
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    data-value="allTime">All Time</a></li>
+
+                                            <li>
+                                                <a class="dropdown-item dropdown-toggle"
+                                                    href="javascript:void(0)">Yearly <span class="ml-10"
+                                                        style="font-size: 19px; margin-top: -2px;">&raquo;</span></a>
+                                               
+                                            </li>
+
+                                            <li>
+                                                <a class="dropdown-item dropdown-toggle"
+                                                    href="javascript:void(0)">Monthly <span class="ml-10"
+                                                        style="font-size: 19px; margin-top: -2px;">&raquo;</span></a>
+                                                
+                                            </li>
+
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    data-value="paymentMethod">Payment
+                                                    Method</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    data-value="category">Category</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                data-value="brand">Brand</a>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div id="chart-container"> -->
+                                        <!-- <canvas id="myChart" style="width:100%;max-width:900px"></canvas>
+                                    </div>
+                                </article>
+                            </div> -->
+                        <!-- </div>
+                    </div>
+                    <div class="card mb-4">
+                        <header class="card-header">
+                            <h4 class="card-title mt-2 ml-2">Top Sold Products</h4>
+                        </header>
+                        </div>
+                    </div> --> 
+
+                </section>
+        </main>
+        <!-- Modal -->
+        <div class="modal fade" id="datePickerModal" tabindex="-1" aria-labelledby="datePickerModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="datePickerModalLabel">Select Date Range</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="sales-report-form" action="/admin/sales/report" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Sample sales data
+            const salesData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                salesData: [1000, 1500, 1200, 1800, 2000, 2500, 2200]
+            };
+    
+            // Get the canvas element with the unique ID
+            const ctx = document.getElementById('salesChart').getContext('2d');
+    
+            // Create the chart using the unique ID
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salesData.labels,
+                    datasets: [{
+                        label: 'Sales',
+                        data: salesData.salesData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+    </body>
+    </html>        
+        

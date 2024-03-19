@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glamour -fs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #020202;
+        }
+        .table {
+            background-color: #ffffff;
+        }
+        .table th, .table td {
+            border-color: #dee2e6;
+        }
+        .btn-edit {
+            background-color: #007bff;
+            border-color: #06090c;
+        }
+        .btn-delete {
+            background-color: #007bff;
+            border-color: #0e1a26;
+        }
+
+        .btn-update {
+            background-color: #007bff;
+            border-color: #03080c;
+        }
+
+        .z-top {
+            z-index: 9999999999;
+        }
+        .text-danger {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/user-header') %>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="/imgs/bannerimg/Brown Minimalist Fashion Sale Banner.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="/imgs/bannerimg/Brown and Beige Minimalist Fashion Banner.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="/imgs/bannerimg/Brown Minimalist Fashion Sale Banner (2).png" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    <section>
+        
+        </section>
+        
+    <div id="loader">
+    <div class="position-fixed top-0 w-0 h-100 w-100 bg-black d-flex align-items-center justify-content-center z-top">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+</body>
+</html>
+
+
+<%- include('../layout/footer') %>

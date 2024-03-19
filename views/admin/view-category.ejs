@@ -1,0 +1,92 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your view product</title>
+  
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+  
+    <!-- Additional styles or CDN links can be added here if needed -->
+  
+  </head>
+  <body>
+  <%- include('partials/header') %>
+  <%- include('partials/aside-nav') %>
+    <main class="main-wrap">
+      
+     
+      <section class="content-main">
+          <div class="content-header">
+              <div>
+                  <h2 class="content-title card-title">Category List</h2>
+                  
+              </div>
+              <div>
+                  
+                  <a href="/admin/add-category" class="btn btn-primary btn-sm rounded">Create new</a>
+              </div>
+          </div>
+          <div class="card mb-4">
+              
+              <div class="card-body">
+                      <article class="itemlist">
+                          <div class="table-responsive">
+                              <table class="table table-striped">
+                                  <thead>
+                                      <tr>
+                                          <th scope="col"> Category</th>
+                                          <th scope="col"> Actions</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <% categories.forEach(category => { %>
+                                          <tr>
+                                              <td><%= category.name %></td>
+                                             
+                                              <td>
+                                                  
+                                                  <form  action="/admin/categories/<%= category._id %>?method=DELETE" method="POST">
+                                                      
+  
+                                                      <button type="submit">Delete</button>
+                                                    </form>
+                                              </td>
+                                          </tr>
+                                      <% }) %>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </article>
+  <!-- ... -->
+   <!-- itemlist  .// -->
+              
+      <!-- <div class="pagination-area mt-30 mb-50">
+          <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-start">
+                  <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                  <li class="page-item"><a class="page-link" href="#">02</a></li>
+                  <li class="page-item"><a class="page-link" href="#">03</a></li>
+                  <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                  <li class="page-item"><a class="page-link" href="#">16</a></li>
+                  <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+              </ul>
+          </nav>
+      </div> -->
+  </section> <!-- content-main end// -->
+  <footer class="main-footer font-xs">
+    <div id="success-message" class="alert alert-success" role="alert">
+        <% if (typeof successMessage !== 'undefined') { %>
+          <%= successMessage %>
+        <% } %>
+      </div>
+</footer>
+        
+    </main>
+    </body>
+  
+    </html>
+    
+    
+  
+  
+  

@@ -1,0 +1,80 @@
+<!-- views/admin/sales-report.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <!-- Add any necessary CSS links or stylesheets -->
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .receipt {
+            width: 6.5in;
+            margin: auto;
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .company-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .current-date {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .receipt-body {
+            margin-bottom: 20px;
+        }
+        .sales-entry {
+            margin-bottom: 10px;
+        }
+        .total-row {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="receipt">
+        <div class="receipt-header">
+            <div class="company-name">Glamour Fashion Store</div>
+            <div class="current-date">Date: <%= currentDate %></div>
+            <h1>Sales Report</h1>
+        </div>
+        <div class="receipt-body">
+            <% reportData.forEach(report => { %>
+                <div class="sales-entry">
+                    <p>Date: <%= report.date %></p>
+                    <p>Total Sales: <%= report.totalSales %></p>
+                    <p>Total Revenue: ₹<%= report.totalRevenue.toFixed(2) %></p>
+                    <!-- Display other report data fields here -->
+                </div>
+            <% }); %>
+        </div>
+        <!-- Example total row -->
+        <div class="total-row">
+            <p>Total Sales: <%= totalSales %></p>
+            <p>Total Revenue: ₹<%= totalRevenue.toFixed(2) %></p>
+            <p>Monthly Revenue: ₹<%= monthlyEarning.toFixed(2) %></p>
+            <p>Weekly Revenue: ₹<%= weeklyEarning.toFixed(2) %></p>
+            <p>Daily Revenue: ₹<%= dailyEarning.toFixed(2) %></p>
+
+            <!-- Add totals for other fields as needed -->
+        </div>
+    </div>
+    
+</body>
+</html>

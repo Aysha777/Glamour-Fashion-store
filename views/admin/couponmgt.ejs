@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your view product</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #couponDetails {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .button-container button {
+            margin-right: 5px;
+        }
+
+        .edit-button {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .edit-button:hover {
+            background-color: #ffca28;
+        }
+
+        .status-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .status-button.active {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .status-button.inactive {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .status-button:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+    <%- include('partials/aside-nav') %>
+    <main class="main-wrap">
+        <section class="content-main">
+            <h1>Coupon Management</h1>
+            <div id="couponDetails">
+                <form id="couponForm">
+                    <table>
+                        <tr>
+                            <th>Coupon Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Purchase Amount</th>
+                            <th>Discount Percentage</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        <% couponDetails.forEach(coupon => { %>
+                        <tr>
+                            <td><%= coupon.couponName %></td>
+                            <td><%= coupon.description %></td>
+                            <td><%= new Date(coupon.startDate).toDateString() %></td>
+                            <td><%= new Date(coupon.endDate).toDateString() %></td>
+                            <td><%= coupon.purchaseAmount %></td>
+                            <td><%= coupon.discountPercentage %></td>
+                            <td><%= coupon.status %></td>
+                            <td class="button-container">
+                                <button type="button" class="status-button <%= coupon.status === 'Active' ? 'active' : 'inactive' %>"
+                                    data-coupon-id="<%= coupon._id %>" data-status="<%= coupon.status %>">
+                                    <%= coupon.status === 'Active' ? 'Deactivate' : 'Activate' %>
+                                </button>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </table>
+                    <button type="submit" id="updateButton">Update</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <!-- Inside your HTML file -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusButtons = document.querySelectorAll('.status-button');
+        statusButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const couponId = this.dataset.couponId;
+                const currentStatus = this.dataset.status;
+                const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
+                
+                // Send an AJAX request to update the status
+                fetch(`/admin/update-coupon-status/${couponId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Status of coupon ${couponId} updated to ${newStatus}`);
+                        // Optionally, you can update the UI here to reflect the change
+                    } else {
+                        console.error('Failed to update coupon status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating coupon status:', error);
+                });
+            });
+        });
+
+        // Other JavaScript code for handling form submission or other actions
+    });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!-- views/payment.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</head>
+<body>
+
+
+<script>
+    document.getElementById('payment-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const amount = document.getElementById('amount').value;
+
+        const response = await fetch('/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount })
+        });
+        
+        const order = await response.json();
+
+        const options = {
+            key: 'rzp_test_U1JmNHMDoFIk7I', // Replace with your actual Razorpay API key ID
+            amount: order.total,
+            currency: order.currency,
+            name: 'Glamour',
+            description: 'Product Description',
+            image: 'https://example.com/logo.png', // Your company logo
+            order_id: order.id,
+            handler: function(response) {
+                console.log('Payment successful:', response);
+                // Handle successful payment (e.g., redirect to a thank you page)
+            },
+            prefill: {
+                name: 'John Doe',
+                email: 'john@example.com',
+                contact: '+911234567890'
+            }
+        };
+
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    });
+</script>
+
+</body>
+</html>

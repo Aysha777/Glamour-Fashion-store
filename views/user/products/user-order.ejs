@@ -1,0 +1,13 @@
+<!-- userOrders.ejs -->
+
+<h2>Orders</h2>
+<% if (user.orders.length > 0) { %>
+  <ul>
+    <% user.orders.forEach(function(order) { %>
+      <li><%= order.orderNumber %> - <%= order.status %></li>
+      <!-- Display more order details -->
+    <% }); %>
+  </ul>
+<% } else { %>
+  <p>No orders placed yet.</p>
+<% } %>

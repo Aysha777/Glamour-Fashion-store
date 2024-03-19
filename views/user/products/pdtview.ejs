@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>product view page</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0"></script>
+    <style>
+        .alert {
+    position: fixed;
+    bottom: 20px;
+    
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+.alertr {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+
+    </style>
+
+</head>
+
+<body style="height: 100%; overflow: scroll;">
+
+    <%- include('../partials/user-header') %>
+
+    
+    <main class="main">
+        
+        
+
+        <section class="mt-50 mb-50" style="margin-top: 150px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product-detail accordion-detail">
+                            <div class="row mb-50">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <div class="detail-gallery1" style="margin-top: 40px;">
+                                        <% product.images.forEach(image =>  { %>
+                                            <img src="/uploads/<%= image %>" alt="Product Image" style="width: 550px; height:380px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" id="detailImage" data-zoom-image="/uploads/<%= image %>">
+                                        <% }); %>
+                                        <div class="thumbnail-container1" style="margin-top: 10px; display: flex; justify-content: flex-start;">
+                                            <!-- Thumbnail image with onclick event -->
+                                            <% product.mimages.forEach((image, index) =>  { %>
+                                                <img src="/uploads/<%= image %>" alt="Product Image" class="thumbnail-image" style="width: 180px; height: 180px; border-radius: 8px; margin-right: 10px; cursor: pointer;">
+                                            <% }); %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12" style="margin-top: 40px;">
+                                    <div class="detail-info" style="font-size: 28px; font-weight: bold; margin-top: 20px; color: #333;">
+                                        <h2 class="title-detail" style="color: #45A8E1;"> <%= product.product_title %> </h2>
+
+                                        <div class="product-detail-rating" style="font-size: 16px; color: #666;">
+                                            <p style="color: #333;">Brand: <span style="color: #45A8E1;"><%= product.brand %></span></p>
+                                        </div>
+
+                                        <hr style="border-top: 1px solid #ccc; margin: 20px 0;">
+
+                                        <div class="clearfix product-price-cover" style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
+                                            <h3 style="color:#45A8E1;">₹<%= product.price %></h3>
+                                        </div>
+
+                                        <div class="short-desc mb-30" style="font-size: 18px; color: #555;">
+                                            <p><%= product.description %></p>
+                                        </div>
+
+                                        <div class="product_sort_info font-xs mb-30">
+                                            <ul style="list-style: none; padding: 0; margin: 0; color: #666;">
+                                                <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
+                                                <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                            </ul>
+                                        </div>
+
+                                        
+                                       
+                                        <div class="attr-detail attr-color">
+                                            <strong style="display: block; font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333;">Color</strong>
+                                            <div style="display: flex; align-items: center;">
+                                                <% const colors = ['white', 'black', 'red', 'blue', 'yellow', 'orange', 'green']; %>
+                                                <% colors.forEach(color => { %>
+                                                    <% const opacity = product.color === color ? 1 : 0.5; %>
+                                                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: <%= color %>; margin-right: 10px; opacity: <%= opacity %>; <%= product.color === color ? 'border: 2px solid #45A8E1;' : '' %>"></div>
+                                                <% }); %>
+                                            </div>
+                                        </div>
+                                        <div class="availability" style="font-size: 18px; color: #555;">
+                                            <strong>Availability:</strong>
+                                            <% if (product.stock > 0) { %>
+                                                <span style="color: green;">In Stock</span>
+                                            <% } else { %>
+                                                <span style="color: red;">Out of Stock</span>
+                                            <% } %>
+                                        </div>
+                                        
+                                        
+                                        <div class="attr-detail attr-size">
+                                            <strong style="display: block; font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333;">Size</strong>
+                                            <ul class="list-filter size-filter font-small" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap;">
+                                                <% const availableSizes = product && product.sizes && Array.isArray(product.sizes) ? product.sizes : []; %>
+                                                <% const allSizes = ['S', 'M', 'L', 'XL']; %>
+                                                <% allSizes.forEach(size => { %>
+                                                    <% const isAvailable = availableSizes.includes(size); %>
+                                                    <li style="margin-right: 10px; margin-bottom: 10px; text-align: center; display: flex; justify-content: center; align-items: center;">
+                                                        <a href="#" style="display: inline-block; background-color: <%= isAvailable ? '#f0f0f0' : 'rgba(169,169,169,0.5)' %>; padding: 8px; border-radius: 5px; width: 40px; height: 40px; text-decoration: none; color: #333; font-size: 14px; opacity: <%= isAvailable ? 1 : 0.5 %>; <%= isAvailable ? 'border: 2px solid #45A8E1;' : '' %>"><%= size %></a>
+                                                    </li>
+                                                <% }); %>
+                                            </ul>
+                                        </div>
+                                        
+                                        
+                                        
+
+                                        <hr style="border-top: 1px solid #ccc; margin: 20px 0;">
+
+                                        <div class="detail-extralink" style="margin-top: 30px; display: flex; align-items: center;">
+                                            <div class="detail-qty border radius" style="border: 1px solid #ccc; display: flex; border-radius: 5px; overflow: hidden; margin-right: 10px; position: relative; align-items: center; height: 50px;">
+                                                <a href="#" class="qty-control qty-down" onclick="event.preventDefault(); changeQuantity(-1);" style="padding: 10px; background-color: #fff; color: #333; cursor: pointer; line-height: 20px;">-</a>
+                                                <span class="qty-val" id="quantityDisplay" style="padding: 10px; background-color: #fff; font-size: 16px; font-weight: bold; line-height: 30px;">1</span>
+                                                <a href="#" class="qty-control qty-up" onclick="event.preventDefault(); changeQuantity(1);" style="padding: 10px; background-color: #fff; color: #333; cursor: pointer; line-height: 20px;">+</a>
+                                            </div>
+                                            
+                                            <div>
+                                                <form method="post" action="/user/cart/add" id="addToCartForm">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <input type="hidden" name="quantityDisplay" id="quantityInput" value="1"> <!-- Hidden input field for quantity -->
+                                                <button type="submit" style="padding: 15px 20px; background-color: #45A8E1; color: #fff; height: 50px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-transform: uppercase;">Add to Cart</button>
+
+                                            </form>
+                                            </div>
+                                            
+                                            
+                                            <form method="post" action="/user/products/wishlist/add" id="addToWishlistForm">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <button type="submit" style="padding: 15px 30px; background-color: #45A8E1; color: #fff; height: 50px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-transform: uppercase;">Add to Wishlist</button>
+                                                
+                                              </form>
+                                              
+                                            
+                                        </div>
+
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div id="message" class="alert <% if (typeof wishlistSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof wishlistErrorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
+                <% if (typeof wishlistSuccessMessage !== 'undefined') { %>
+                    <%= wishlistSuccessMessage %>
+                <% } else if (typeof wishlistErrorMessage !== 'undefined') { %>
+                    <%= wishlistErrorMessage %>
+                <% } %>
+            </div>
+            <div id="message" class="alert <% if (typeof addToCartSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof addToCartErrorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
+                <% if (typeof addToCartSuccessMessage !== 'undefined') { %>
+                    <%= addToCartSuccessMessage %>
+                <% } else if (typeof addToCartErrorMessage !== 'undefined') { %>
+                    <%= addToCartErrorMessage %>
+                <% } %>
+            </div>
+            
+            
+            
+        </footer>
+        
+        
+        
+    </main>
+    
+    <style>
+        .color-link.selected {
+            border: 2px solid #45A8E1;
+        }
+    </style>
+    
+    
+   
+    <script>
+        
+        // Function to change the quantity value
+        function changeQuantity(change) {
+            console.log("reached changeqty");
+            var quantityDisplay = document.getElementById('quantityDisplay');
+            var currentQuantity = parseInt(quantityDisplay.textContent);
+            var newQuantity = currentQuantity + change;
+            if (newQuantity > 0) {
+                quantityDisplay.textContent = newQuantity;
+                document.getElementById('quantityInput').value = newQuantity; // Set the value of the hidden input field
+            }
+        }
+
+        function displayFlashMessage(message, type) {
+            var messageElement = document.getElementById('message');
+            if (messageElement) {
+                messageElement.innerHTML = message;
+                messageElement.classList.add('alert-' + type);
+                messageElement.classList.remove('hidden');
+                setTimeout(function () {
+                    messageElement.innerHTML = '';
+                    messageElement.classList.remove('alert-' + type);
+                }, 5000); // Hide the message after 5 seconds
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            var detailImage = document.getElementById('detailImage');
+            var thumbnailImages = document.querySelectorAll('.thumbnail-image');
+        
+            thumbnailImages.forEach(function(thumbnailImage) {
+                thumbnailImage.addEventListener('click', function() {
+                    var tempSrc = detailImage.src;
+                    detailImage.src = this.src;
+                    this.src = tempSrc;
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            feather.replace(); // Initialize Feather Icons
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var colorList = document.querySelectorAll('.color-link');
+
+            colorList.forEach(function (colorLink) {
+                colorLink.addEventListener('click', function () {
+                    // Remove 'selected' class from all color links
+                    colorList.forEach(function (link) {
+                        link.classList.remove('selected');
+                    });
+
+                    // Add 'selected' class to the clicked color link
+                    colorLink.classList.add('selected');
+                });
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+   
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+<script src="/js/main.js?v=3.4"></script>
+
+  
+</body>
+
+</html>

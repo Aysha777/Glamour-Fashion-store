@@ -1,0 +1,54 @@
+/* Add this CSS to your existing styles or create a new CSS file */
+
+/* Product title style */
+.title-detail {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px; /* Adjust the top margin as needed */
+    color: #333; /* Adjust the color as needed */
+  }
+  
+  /* Color rounds styles */
+  .product-color {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .product-color-red { background-color: #ff0000; }
+  .product-color-yellow { background-color: #ffd700; }
+  .product-color-white { background-color: #ffffff; }
+  .product-color-orange { background-color: #ffa500; }
+  .product-color-cyan { background-color: #00ffff; }
+  .product-color-green { background-color: #008000; }
+  .product-color-purple { background-color: #800080; }
+  
+  /* Icon styles */
+  .social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .social-icons img {
+    width: 30px; /* Adjust the width as needed */
+    height: 30px; /* Adjust the height as needed */
+    border-radius: 50%; /* Add rounded corners to the icons */
+  }
+  
+  /* Product price style */
+  .product-price {
+    font-size: 20px;
+    color: #e44d26; /* Adjust the color as needed */
+    font-weight: bold;
+  }
+  
+  /* Short description style */
+  .short-desc p {
+    font-size: 16px;
+    color: #666; /* Adjust the color as needed */
+  }
+  
+  /* Add more styles as needed */
+  

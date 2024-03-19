@@ -1,0 +1,107 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+
+</head>
+<body>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+    <%- include('partials/admin-header') %>
+    <section class="content-main">
+        <form action="/admin/categories/edit/<%= category._id %>" method="POST">
+
+            <div class="row">
+                
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label for="product_title" class="form-label">Category</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName" value="<%= category.categoryName %>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label d-block">Sub Category</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Shirts" id="product-cat" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat"> Shirts</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="TShirt" id="product-cat-1" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-1"> TShirts </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Sweatshirts" id="product-cat-2" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-2"> Sweatshirts </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Jeans" id="product-cat-3" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-3"> Jeans </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Kurties" id="product-cat-4" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-4"> Kurties </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Bedsheet" id="product-cat-5" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-5">Bedsheet </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Carpets" id="product-cat-8" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-8"> Carpets</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Doormates" id="product-cat-8" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-8"> Doormates</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Perfumes" id="product-cat-8" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-8"> Perfumes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Lipstick" id="product-cat-8" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-8"> Lipstick</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Nailpolish" id="product-cat-8" name="subcategoryName[]">
+                                    <label class="form-check-label" for="product-cat-8"> Nailpolish</label>
+                                </div>
+                            </div>
+        
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class="row">
+                    <div class="col-lg-6">
+                        <button class="btn btn-md rounded font-sm hover-up">Update</button>
+                    </div>
+                
+            </div>
+        </form>
+    </section>
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                document.write(new Date().getFullYear())
+                </script> Glamour-FashionStore
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+                    All rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+</body>
+</html>

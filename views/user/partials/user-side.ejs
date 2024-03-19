@@ -1,0 +1,43 @@
+<div class="sidebaro">
+    <nav class="side-navo">
+        <ul>
+            <li><a href="#" onclick="showSection('user-details')">User Details</a></li>
+            <li><a href="#" onclick="showSection('addresses')">Addresses</a></li>
+            <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+            <li><a href="#" onclick="showSection('edit-profile')">Change Password</a></li>
+            <li><a href="#" onclick="showSection('logout')">Logout</a></li>
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .sidebaro {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100%;
+        background-color: #BCE0F5;
+        padding-top: 20px;
+    }
+
+    .side-navo ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .side-navo ul li {
+        padding: 10px 20px;
+    }
+
+    .side-navo ul li a {
+        color: #000000;
+        text-decoration: none;
+        display: block;
+    }
+
+    .side-navo ul li a:hover {
+        background-color: #45A8E1;
+    }
+</style>
