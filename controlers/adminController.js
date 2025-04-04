@@ -356,8 +356,9 @@ const updateProduct = async (req, res) => {
       mimages,
       stock,
     } = req.body;
-
+    console.log("Received data:", req.body);
     const productId = req.params.id;
+    console.log("pdtiD:", productId);
 
     // Find the existing product by ID
     const existingProduct = await Product.findById(productId);
@@ -365,32 +366,72 @@ const updateProduct = async (req, res) => {
     if (!existingProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
-    console.log("Received data:", req.body);
 
+    console.log("Existing pdt:", existingProduct);
     // Update the fields
     existingProduct.product_title = product_title;
-
-    existingProduct.color = color;
-    existingProduct.sizes = sizes;
-    existingProduct.brand = brand;
+    existingProduct.product_category =
+      product_category || existingProduct.product_category;
+    console.log(existingProduct.product_category);
+    existingProduct.subcategory = subcategory || existingProduct.subcategory;
+    console.log(existingProduct.subcategory);
+    existingProduct.color = color || existingProduct.color; // Retain existing value if not provided
+    existingProduct.sizes = sizes || existingProduct.sizes;
+    existingProduct.brand = brand || existingProduct.brand; // Retain existing value if not provided
     existingProduct.description = description;
     existingProduct.price = price;
-    existingProduct.images = images;
-    existingProduct.mimages = mimages;
-    existingProduct.stock = stock;
-
-    const category = await Category.findById(product_category);
-    const subCat = await Subcategory.findById(subcategory);
-
-    if (!category || !subCat) {
-      return res
-        .status(404)
-        .json({ message: "Category or Subcategory not found" });
+    if (images.length === 0 || images[0] === "") {
+      existingProduct.images = existingProduct.images;
+    } else {
+      existingProduct.images = images;
     }
 
-    existingProduct.product_category = category.name;
-    existingProduct.subcategory = subCat.name;
+    // Retain existing mimages if received mimages array is empty
+    if (mimages.length === 0 || mimages[0] === "") {
+      existingProduct.mimages = existingProduct.mimages;
+    } else {
+      existingProduct.mimages = mimages;
+    }
+
+    existingProduct.stock = stock;
+
+    if (product_category) {
+      const category = await Category.findById(product_category);
+      if (!category) {
+        return res.status(404).json({ message: "Product category not found" });
+      }
+      existingProduct.product_category = category.name;
+    }
+
+    console.log("updated category:", existingProduct.product_category);
+
+    if (subcategory) {
+      const subCat = await Subcategory.findById(subcategory);
+      if (!subCat) {
+        return res
+          .status(404)
+          .json({ message: "Product subcategory not found" });
+      }
+      existingProduct.subcategory = subCat.name;
+    }
+    console.log("updated  subcategiry:", existingProduct.subcategory);
+
+    // const category = await Category.findById(product_category);
+    // const subCat = await Subcategory.findById(subcategory);
+
+    // if (!category || !subCat) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "Category or Subcategory not found" });
+    // }
+
+    // existingProduct.product_category = category.name;
+    // console.log("pdt category:",existingProduct.product_category);
+    // existingProduct.subcategory = subCat.name;
+    // console.log("subcategory:",existingProduct.subcategory);
+
     await existingProduct.save();
+    console.log("updated data:", existingProduct);
 
     res.redirect("/admin/view-product");
   } catch (error) {
@@ -448,6 +489,55 @@ const addCategory = async (req, res) => {
   }
 };
 
+const renderEditCategoryForm = async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    return res.render("admin/edit-category", { category });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const updateCategoryName = async (req, res) => {
+  try {
+    console.log("Update category reached");
+
+    const categoryId = req.params.categoryId;
+    console.log("Category ID:", categoryId);
+
+    // Fetch the category data from the database
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    // Extract the new category name from the fetched data
+    const { categoryName } = req.body;
+    console.log("New Category Name:", categoryName);
+
+    // Update the category with the new name
+    const updatedCategory = await Category.findByIdAndUpdate(
+      categoryId,
+      { name: categoryName },
+      { new: true }
+    );
+
+    if (!updatedCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    console.log("Updated Category:", updatedCategory);
+    return res.status(200).json(updatedCategory);
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -456,6 +546,7 @@ const logout = (req, res) => {
     res.redirect("/user/login");
   });
 };
+
 const deleteCategory = async (req, res) => {
   try {
     const { id: categoryId } = req.params; // Retrieve categoryId from URL params
@@ -854,6 +945,7 @@ const applyCoupon = async (req, res) => {
 };
 
 // const fetchAllUsers = async (req, res) => {
+
 //   try {
 //     const users = await User.find();
 //     res.render('admin/users', { users });
@@ -988,12 +1080,12 @@ const toggleUnblockUser = async (req, res) => {
 };
 async function getOrderDetails(req, res) {
   try {
-      const orderId = req.params.orderId;
-      const order = await OrderDetail.findById(orderId).populate('items.product');
-      res.render('admin/detailorder', { order }); // Render the EJS template with the order data
+    const orderId = req.params.orderId;
+    const order = await OrderDetail.findById(orderId).populate("items.product");
+    res.render("admin/detailorder", { order }); // Render the EJS template with the order data
   } catch (error) {
-      console.error('Error fetching order details:', error);
-      res.status(500).send('Internal Server Error');
+    console.error("Error fetching order details:", error);
+    res.status(500).send("Internal Server Error");
   }
 }
 
@@ -1010,6 +1102,8 @@ module.exports = {
   loadAdminViewCategory,
   loadAdminAddCategory,
   addCategory,
+  renderEditCategoryForm,
+  updateCategoryName,
   addSubCategory,
   userDashboard,
   deleteProduct,

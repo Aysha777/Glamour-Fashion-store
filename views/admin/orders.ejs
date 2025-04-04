@@ -66,7 +66,7 @@
                                     <td><%= item.product ? item.product.product_title : "N/A" %></td>
                                     <td><b><%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></b></td>
                                     <td><%= order.billingDetails.email %></td>
-                                    <td>$<%= order.totalPrice %></td>
+                                    <td>₹<%= order.totalPrice %></td>
                                     <td>
                                         <select name="status" class="order-status" onchange="saveOrderStatus(this)">
                                             <option value="Pending" style="background-color: #ffc107; color: black;">Pending</option>

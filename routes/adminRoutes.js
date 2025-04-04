@@ -285,5 +285,7 @@ admin_route.post("/users/:userId/edit", adminController.updatingeUser);
 admin_route.post("/users/:userId/block", adminController.toggleBlockUser);
 admin_route.post("/users/:userId/unblock", adminController.toggleUnblockUser);
 admin_route.get('/orders/:orderId', getOrderDetails);
+admin_route.get('/edit-category/:categoryId', adminController.renderEditCategoryForm);
+admin_route.post('/update-category/:categoryId', adminController.updateCategoryName);
 
 module.exports = admin_route;

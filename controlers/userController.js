@@ -226,91 +226,6 @@ const logout = (req, res) => {
   });
 };
 
-// const addToCart = async (req, res, next) => {
-//   try {
-//     console.log("addToCart reached");
-
-//     const { productId, quantityDisplay } = req.body;
-//     console.log(req.body);
-//     const userId = req.session.user;
-
-//     console.log("userid:", userId);
-//     console.log("quantity", quantityDisplay);
-
-//     // Find the user
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       return res.status(404).send("User not found");
-//     }
-
-//     // Initialize user.cart as an empty array if it's undefined
-//     if (!user.cart) {
-//       user.cart = [];
-//     }
-
-//     // Find the product
-//     const product = await Product.findById(productId);
-//     if (!product) {
-//       return res.status(404).send("Product not found");
-//     }
-
-//     // Check if the product is in stock
-//     if (product.stock <= 0) {
-//       return res.status(400).send("Product is out of stock");
-//     }
-
-//     // Check if the product is already in the user's cart
-//     const isProductInCart = user.cart.includes(productId);
-//     if (isProductInCart) {
-//       return res.status(400).send("Product is already in the cart");
-//     }
-
-//     // Add the product to the user's cart
-//     user.cart.push(productId);
-//     await user.save();
-
-//     // Create or update the cart document
-//     let cart = await Cart.findOne({ user: userId });
-//     if (!cart) {
-//       cart = new Cart({
-//         user: userId,
-//         items: [],
-//       });
-//     }
-
-//     // Check if the product is already in the cart items
-//     const existingItem = cart.items.find((item) => item.product.equals(productId));
-//     if (existingItem) {
-//       existingItem.quantity += parseInt(quantityDisplay);
-//     } else {
-//       // Calculate subtotal
-//       const subtotal = product.price * parseInt(quantityDisplay);
-
-//       cart.items.push({
-//         product: productId,
-//         quantity: parseInt(quantityDisplay),
-//         productImage: product.images[0], // Assuming product.images is an array and you want the first image URL
-//         productTitle: product.product_title,
-//         price: product.price,
-//         subtotal: subtotal,
-//       });
-//     }
-
-//     // Calculate total price
-//     cart.totalPrice = cart.items.reduce((total, item) => total + item.subtotal, 0);
-
-//     await cart.save();
-//     console.log("cart item:",cart);
-//     req.flash("addToCartSuccessMessage", "Product added to cart successfully");
-
-//     res.locals.cart = cart;
-//     next();
-//   } catch (error) {
-//     console.error("Error adding product to cart:", error);
-//     return res.status(500).send(`Internal Server Error: ${error.message}`);
-//   }
-// };
-
 const addToCart = async (req, res, next) => {
   try {
     console.log("addToCart reached");
@@ -340,313 +255,203 @@ const addToCart = async (req, res, next) => {
     if (product.stock <= 0) {
       console.log("Product is out of stock");
       req.flash("addToCartSuccessMessage", "Product is out of stock");
-      return res.redirect("back");
+      // Render the view with the error message
+      return res.render("user/products/pdtview", {
+        product,
+        quantityDisplay: product.quantity,
+        cart: null,
+        addToCartErrorMessage: null,
+        addToCartSuccessMessage: req.flash("addToCartSuccessMessage")[0],
+      });
     }
 
-    let totalQuantityInCart = 0;
+    // Calculate total quantity of the product already in the cart
+    const totalQuantityInCart = user.cart
+      ? user.cart.reduce((total, cartItem) => {
+          if (cartItem.productId === productId) {
+            return total + cartItem.quantity;
+          }
+          return total;
+        }, 0)
+      : 0;
 
-    // Check if user.cart is defined
-    if (user.cart) {
-      // Calculate the total quantity of the product in the user's cart
-      totalQuantityInCart = user.cart.reduce((total, cartItem) => {
-        if (cartItem.productId === productId) {
-          return total + cartItem.quantity;
-        }
-        return total;
-      }, 0);
-    }
+    console.log("total quantity in cart:", totalQuantityInCart);
 
-    console.log("toatlqtyin cart:", totalQuantityInCart);
+    // Calculate the remaining stock after deducting the quantity in the cart
+    const remainingStock = product.stock - totalQuantityInCart;
 
-    // const totalQuantityInCart = user.cart.reduce((total, cartItem) => {
-    //   if (cartItem.productId === productId) {
-    //     return total + cartItem.quantity;
-    //   }
-    //   return total;
-    // }, 0);
+    if (parseInt(quantityDisplay) <= remainingStock) {
+      // If selected quantity is less than or equal to remaining stock, add to cart
+      // Check if user.cart is defined
+      if (!user.cart) {
+        user.cart = [];
+      }
 
-    // console.log("toatlqtyin cart:",totalQuantityInCart);
+      // Check if the product is already in the user's cart
+      const isProductInCart = user.cart
+        ? user.cart.some((item) => item.productId === productId)
+        : false;
+      if (isProductInCart) {
+        return res.status(400).send("Product is already in the cart");
+      }
 
-    if (parseInt(quantityDisplay) + totalQuantityInCart > product.stock) {
+      // Add the product to the user's cart
+      user.cart.push({ productId, quantity: parseInt(quantityDisplay) });
+      await user.save();
+
+      // Subtract the quantity from the stock
+      product.stock -= parseInt(quantityDisplay);
+      await product.save();
+
+      // Create or update the cart document
+      let cart = await Cart.findOne({ user: userId });
+      if (!cart) {
+        cart = new Cart({
+          user: userId,
+          items: [],
+        });
+      }
+
+      // Check if the product is already in the cart items
+      const existingItem = cart.items.find((item) =>
+        item.product.equals(productId)
+      );
+      if (existingItem) {
+        existingItem.quantity += parseInt(quantityDisplay);
+      } else {
+        // Calculate subtotal
+        const subtotal = product.price * parseInt(quantityDisplay);
+
+        cart.items.push({
+          product: productId,
+          quantity: parseInt(quantityDisplay),
+          productImage: product.images[0], // Assuming product.images is an array and you want the first image URL
+          productTitle: product.product_title,
+          price: product.price,
+          subtotal: subtotal,
+        });
+      }
+
+      // Calculate total price
+      cart.totalPrice = calculateTotalPrice(cart.items);
+
+      await cart.save();
+      console.log("cart item:", cart);
+      req.flash(
+        "addToCartSuccessMessage",
+        "Product added to cart successfully"
+      );
+
+      // Render the view with the updated data
+      return res.render("user/products/pdtview", {
+        product,
+        quantityDisplay: product.quantity,
+        cart,
+        addToCartSuccessMessage: req.flash("addToCartSuccessMessage")[0],
+        addToCartErrorMessage: null,
+      });
+    } else {
+      // If selected quantity exceeds remaining stock, show error message
       req.flash(
         "addToCartSuccessMessage",
         "Selected quantity exceeds available stock"
       );
-      return res.redirect("/user/products/pdtview");
-    }
-
-
-    if (!user.cart) {
-      user.cart = [];
-    }
-
-    // Check if the product is already in the user's cart
-    const isProductInCart = user.cart.includes(productId);
-    if (isProductInCart) {
-      return res.status(400).send("Product is already in the cart");
-    }
-
-    // Add the product to the user's cart
-    user.cart.push({ productId, quantity: parseInt(quantityDisplay) });
-    await user.save();
-
-    product.stock -= parseInt(quantityDisplay);
-    await product.save();
-    // Create or update the cart document
-    let cart = await Cart.findOne({ user: userId });
-    if (!cart) {
-      cart = new Cart({
-        user: userId,
-        items: [],
+      // Render the view with the error message
+      return res.render("user/products/pdtview", {
+        product,
+        quantityDisplay: product.quantity,
+        cart: null,
+        addToCartErrorMessage: null,
+        addToCartSuccessMessage: req.flash("addToCartSuccessMessage")[0],
       });
     }
-
-    // Check if the product is already in the cart items
-    const existingItem = cart.items.find((item) =>
-      item.product.equals(productId)
-    );
-    if (existingItem) {
-      existingItem.quantity += parseInt(quantityDisplay);
-    } else {
-      // Calculate subtotal
-      const subtotal = product.price * parseInt(quantityDisplay);
-
-      cart.items.push({
-        product: productId,
-        quantity: parseInt(quantityDisplay),
-        productImage: product.images[0], // Assuming product.images is an array and you want the first image URL
-        productTitle: product.product_title,
-        price: product.price,
-        subtotal: subtotal,
-      });
-    }
-
-    // Calculate total price
-    cart.totalPrice = cart.items.reduce(
-      (total, item) => total + item.subtotal,
-      0
-    );
-
-    await cart.save();
-    console.log("cart item:", cart);
-    req.flash("addToCartSuccessMessage", "Product added to cart successfully");
-
-    // Render the view with the updated data
-    res.render("user/products/pdtview", {
-      product,
-      quantityDisplay: product.quantity,
-      cart,
-      addToCartSuccessMessage: req.flash("addToCartSuccessMessage")[0],
-      addToCartErrorMessage: req.flash("addToCartErrorMessage")[0],
-    });
   } catch (error) {
     console.error("Error adding product to cart:", error);
     return res.status(500).send(`Internal Server Error: ${error.message}`);
   }
 };
 
-// const addToCart = async (req, res, next) => {
-//   try {
-//     console.log("addToCart reached");
-
-//     // const productId = req.body.productId;
-//     const { productId, quantity } = req.body;
-
-//     const userId = req.session.user;
-
-//     console.log("userid:",userId);
-//     // const quantity = req.body.quantity; // Get productId and quantity from the request body
-//     console.log("quantity", quantity);
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res.status(404).send("User not found");
-//     }
-
-//     if (!user.cart) {
-//       user.cart = [];
-//     }
-
-//     const isProductInCart = user.cart.includes(productId);
-
-//     if (isProductInCart) {
-//       return res.status(400).send("Product is already in the cart");
-//     }
-
-//     user.cart.push(productId);
-//     await user.save();
-
-//     const product = await Product.findById(productId); // Add this line to fetch product details
-
-//     let cart = await Cart.findOne({ user: userId });
-
-//     if (!cart) {
-//       cart = new Cart({
-//         user: userId,
-//         items: [
-//           { product: productId, quantity: 1, productImage: product.images },
-//         ],
-//       });
-//     } else {
-//       const existingItem = cart.items.find((item) =>
-//         item.product.equals(productId)
-//       );
-
-//       if (existingItem) {
-//         existingItem.quantity++;
-//       } else {
-//         cart.items.push({
-//           product: productId,
-//           quantity: 1,
-//           productImage: product.images,
-//         });
-//       }
-//     }
-
-//     // Populate the 'items.product' path manually
-//     const populatedItems = await Promise.all(
-//       cart.items.map(async (item) => {
-//         const product = await Product.findById(item.product);
-//         if (product) {
-//           item.product = product;
-//           item.subtotal = product.price * item.quantity;
-//         } else {
-//           console.error("Product not found for item:", item);
-//         }
-//         return item;
-//       })
-//     );
-
-//     cart.items = populatedItems;
-//     cart.totalPrice = calculateTotalPrice(cart.items);
-
-//     await cart.save(); // Save the changes to the database
-//     req.flash("addToCartSuccessMessage", "Product added to cart successfully");
-
-//     next();
-//   } catch (error) {
-//     console.error("Error adding product to cart:", error);
-//     return res.status(500).send(`Internal Server Error: ${error.message}`);
-//   }
-// };
-// const addToCart = async (req, res, next) => {
-//   try {
-//     console.log("addakan ethii");
-//     console.log(req.body);
-//     const productId = req.body.productId;
-//     const userId = req.session.user;
-//     const quantity = req.body.quantity; // Get productId and quantity from the request body
-//     console.log("quantity", quantity);
-
-//     // Fetch the product to check its stock availability
-//     const product = await Product.findById(productId);
-
-//     if (!product) {
-//       return res.status(404).send("Product not found");
-//     }
-
-//     // Check if the product is out of stock
-//     if (product.stock <= 0) {
-//       return res.status(400).send("Product is out of stock");
-//     }
-
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res.status(404).send("User not found");
-//     }
-
-//     if (!user.cart) {
-//       user.cart = [];
-//     }
-
-//     const isProductInCart = user.cart.includes(productId);
-
-//     if (isProductInCart) {
-//       req.session.cartErroMessage = 'Product is already in the cart';
-//       // return res.status(400).send("Product is already in the cart");
-//     }
-
-//     // Update the user's cart with the new product
-//     user.cart.push(productId);
-//     await user.save();
-
-//     let cart = await Cart.findOne({ user: userId });
-
-//     if (!cart) {
-//       cart = new Cart({
-//         user: userId,
-//         items: [
-//           { product: productId, quantity: 1, productImage: product.images },
-//         ],
-//       });
-//     } else {
-//       const existingItem = cart.items.find((item) =>
-//         item.product.equals(productId)
-//       );
-
-//       if (existingItem) {
-//         existingItem.quantity++;
-//       } else {
-//         cart.items.push({
-//           product: productId,
-//           quantity: 1,
-//           productImage: product.images,
-//         });
-//       }
-//     }
-
-//     // Populate the 'items.product' path manually
-//     const populatedItems = await Promise.all(
-//       cart.items.map(async (item) => {
-//         const product = await Product.findById(item.product);
-//         if (product) {
-//           item.product = product;
-//           item.subtotal = product.price * item.quantity;
-//         } else {
-//           console.error("Product not found for item:", item);
-//         }
-//         return item;
-//       })
-//     );
-
-//     cart.items = populatedItems;
-//     cart.totalPrice = calculateTotalPrice(cart.items);
-
-//     await cart.save(); // Save the changes to the database
-//     req.session.cartSuccesMessage = 'Product added to cart successfully';
-
-//     next();
-//   } catch (error) {
-//     console.error("Error adding product to cart:", error);
-//     req.session.cartErroMessage = 'Error adding product to cart';
-//     return res.status(500).send(`Internal Server Error: ${error.message}`);
-//   }
-// };
 
 function calculateTotalPrice(items) {
   return items.reduce((total, item) => total + item.subtotal, 0);
 }
 
+// const removeFromCart = async (req, res, next) => {
+//   try {
+//     console.log("removepdt @ usercontrolelr");
+//     const itemId = req.body.itemId; // Get the item ID from the request body
+//     if (!itemId) {
+//       throw new Error("Item ID is missing in the request body");
+//     }
+
+//     const userId = req.session.user; // Get the user ID from the session
+//     console.log("userid:", userId);
+//     // Query the cart using the user ID
+//     const cart = await Cart.findOne({ user: userId });
+
+//     if (!cart) {
+//       throw new Error("Cart not found for the user");
+//     }
+
+//     // Find the index of the item to remove
+//     const itemIndex = cart.items.findIndex(
+//       (item) => item._id.toString() === itemId
+//     );
+
+//     if (itemIndex === -1) {
+//       throw new Error("Item not found in the cart");
+//     }
+
+//     // Remove the item from the cart's items array
+//     cart.items.splice(itemIndex, 1);
+
+//     // Recalculate the total price based on the remaining items
+//     cart.totalPrice = calculateTotalPrice(cart.items);
+
+//     // Save the updated cart
+//     await cart.save();
+
+//     // Send a success response
+//     res.status(200).send("Item removed from cart successfully");
+//   } catch (error) {
+//     console.error("Error removing item from cart:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
 const removeFromCart = async (req, res, next) => {
   try {
+    console.log("removepdt @ usercontrolelr");
     const itemId = req.body.itemId; // Get the item ID from the request body
     if (!itemId) {
       throw new Error("Item ID is missing in the request body");
     }
 
     const userId = req.session.user; // Get the user ID from the session
-
+    console.log("userid:", userId);
     // Query the cart using the user ID
-    const cart = await Cart.findOne({ user: userId });
+    const cart = await Cart.findOne({ user: userId }).populate("items.product");
 
     if (!cart) {
       throw new Error("Cart not found for the user");
     }
 
+    // Find the item to remove
+    const item = cart.items.find((item) => item._id.toString() === itemId);
+
+    if (!item) {
+      throw new Error("Item not found in the cart");
+    }
+
+    // Restore the stock quantity of the product
+    if (item.product) {
+      item.product.stock += item.quantity;
+      await item.product.save();
+    }
+
     // Find the index of the item to remove
     const itemIndex = cart.items.findIndex(
-      (item) => item._id.toString() === itemId
+      (cartItem) => cartItem._id.toString() === itemId
     );
 
     if (itemIndex === -1) {
@@ -803,8 +608,7 @@ const updateQuantity = async (req, res) => {
   );
 
   try {
-    // Retrieve the user ID from the session
-    const userId = req.session.user._id;
+    const userId = req.session.user; // Get the user ID from the session
 
     console.log("User ID:", userId);
 
@@ -824,6 +628,20 @@ const updateQuantity = async (req, res) => {
       return res.status(404).json({ error: "Item not found in cart" });
     }
 
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      console.error("Product not found");
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Check if the updated quantity exceeds available stock
+    if (quantity > product.stock) {
+      console.error("Quantity exceeds available stock");
+      return res
+        .status(400)
+        .json({ error: "Quantity exceeds available stock" });
+    }
     // Update the quantity of the specified product in the user's cart
     // userCart.items[itemIndex].quantity = quantity;
 
@@ -869,14 +687,31 @@ const updateQuantity = async (req, res) => {
 
 const renderTshirtPage = async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const perPage = 6;
+
+    const totalCount = await Product.countDocuments({
+      product_category:"Men",
+      subcategory:"T-shirts",
+    });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
     const tshirtsProducts = await Product.find({
       product_category: "Men",
       subcategory: "T-shirts",
-    });
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
 
     res.render("user/products/Tshirts", {
       products: tshirtsProducts || [],
       category: "Men",
+      pagination:{
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -886,14 +721,31 @@ const renderTshirtPage = async (req, res) => {
 
 const rendershirtPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1; 
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Men",
       subcategory: "Shirts",
     });
 
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Men",
+      subcategory: "Shirts",
+    })
+    .skip((page - 1) * perPage) 
+    .limit(perPage);
+
     res.render("user/products/Shirts", {
       products: shirtsProducts || [],
       category: "Men",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -903,14 +755,32 @@ const rendershirtPage = async (req, res) => {
 
 const renderjeansPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1; 
+    const perPage = 6; 
+
+
+    const totalCount = await Product.countDocuments({
       product_category: "Men",
       subcategory: "Jeans",
     });
 
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Men",
+      subcategory: "Jeans",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage); 
+
     res.render("user/products/Jeans", {
       products: shirtsProducts || [],
       category: "Men",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -920,14 +790,31 @@ const renderjeansPage = async (req, res) => {
 
 const renderwomenjeansPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Women",
       subcategory: "Jeans-women",
     });
+    console.log("count of jw:",totalCount);
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Women",
+      subcategory: "Jeans-women",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
 
     res.render("user/products/jeansw", {
       products: shirtsProducts || [],
       category: "Women",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -937,13 +824,33 @@ const renderwomenjeansPage = async (req, res) => {
 
 const renderkurtiesPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Women",
       subcategory: "Kurties ",
     });
+
+    console.log("count:",totalCount);
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Women",
+      subcategory: "Kurties ",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage); 
+
     res.render("user/products/Kurties", {
       products: shirtsProducts || [],
       category: "Women",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
+
     });
   } catch (error) {
     console.error(error);
@@ -953,13 +860,31 @@ const renderkurtiesPage = async (req, res) => {
 
 const renderwomentshirtsPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Women",
       subcategory: "Tshirts-women",
     });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Women",
+      subcategory: "Tshirts-women",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage); 
+
     res.render("user/products/Tshirtw", {
       products: shirtsProducts || [],
       category: "Women",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -969,13 +894,31 @@ const renderwomentshirtsPage = async (req, res) => {
 
 const renderkidstshirtsPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Kids",
       subcategory: "Tshirts-kids",
     });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Kids",
+      subcategory: "Tshirts-kids",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage); 
+
     res.render("user/products/Tshirtk", {
       products: shirtsProducts || [],
       category: "Kids",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -985,13 +928,31 @@ const renderkidstshirtsPage = async (req, res) => {
 
 const renderSweatshirtsPage = async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
+      product_category: "Kids",
+      subcategory: "Tshirts-kids",
+    });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
     const shirtsProducts = await Product.find({
       product_category: "Kids",
       subcategory: "Sweatshirts",
-    });
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/Sweatshirts", {
       products: shirtsProducts || [],
       category: "Kids",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1001,13 +962,31 @@ const renderSweatshirtsPage = async (req, res) => {
 
 const renderkidsjeanssPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "Kids",
       subcategory: "Jeans-kids",
     });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "Kids",
+      subcategory: "Jeans-kids",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/jeansk", {
       products: shirtsProducts || [],
       category: "Kids",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1017,13 +996,31 @@ const renderkidsjeanssPage = async (req, res) => {
 
 const renderbedsheetPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1; 
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "home",
       subcategory: "Bedsheets",
     });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "home",
+      subcategory: "Bedsheets",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/bedsheets", {
       products: shirtsProducts || [],
       category: "home",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1033,13 +1030,31 @@ const renderbedsheetPage = async (req, res) => {
 
 const rendercarpetstPage = async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
+      product_category: "home",
+      subcategory: "carpets",
+    });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
     const shirtsProducts = await Product.find({
       product_category: "home",
       subcategory: "carpets ",
-    });
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/carpets", {
       products: shirtsProducts || [],
       category: "home",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1049,13 +1064,31 @@ const rendercarpetstPage = async (req, res) => {
 
 const renderdoormatesPage = async (req, res) => {
   try {
-    const shirtsProducts = await Product.find({
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
       product_category: "home",
       subcategory: "Doormates",
     });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    const shirtsProducts = await Product.find({
+      product_category: "home",
+      subcategory: "Doormates",
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/doormates", {
       products: shirtsProducts || [],
       category: "home",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1065,13 +1098,31 @@ const renderdoormatesPage = async (req, res) => {
 
 const rendernailpolishsPage = async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
+      product_category: "beauty",
+      subcategory: "nail",
+    });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
     const shirtsProducts = await Product.find({
       product_category: "beauty",
       subcategory: "nail ",
-    });
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/nailpolish", {
       products: shirtsProducts || [],
       category: "beauty",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -1081,13 +1132,31 @@ const rendernailpolishsPage = async (req, res) => {
 
 const renderlipstickPage = async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const perPage = 6; 
+
+    const totalCount = await Product.countDocuments({
+      product_category: "beauty",
+      subcategory: "Lipstick",
+    });
+
+    const totalPages = Math.ceil(totalCount / perPage);
+
     const shirtsProducts = await Product.find({
       product_category: "beauty",
       subcategory: "Lipstick ",
-    });
+    })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
     res.render("user/products/lipstick", {
       products: shirtsProducts || [],
       category: "Lipstick ",
+      pagination: {
+        page,
+        totalPages,
+        itemCount: totalCount,
+      },
     });
   } catch (error) {
     console.error(error);

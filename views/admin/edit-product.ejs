@@ -30,24 +30,26 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="product_category" class="form-label">Product Category</label>
-                                    <select name="product_category" value="<%= product.product_category %>">
+                                    <p><%= product.product_category %></p>
+
+                                    <select name="product_category">
+                                        <option value="" selected disabled>Select Category</option> <!-- Default "Select Category" option -->
                                         <% categories.forEach(category => { %>
-                                            <option value="<%= category._id %>" <%= (product.product_category && category._id.toString() === product.product_category.toString()) ? 'selected' : '' %>><%= category.name %></option>
+                                            <option value="<%= category._id %>" <%= (category._id.toString() === product.product_category.toString()) ? 'selected' : '' %>><%= category.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="sub_category" class="form-label">Product Subcategory</label>
-                                    <select name="subcategory" value="<%= product.subcategory %>">
+                                    <p><%= product.subcategory %></p>
+
+                                    <select name="subcategory">
+                                        <option value="" selected disabled>Select Subcategory</option> <!-- Default "Select Subcategory" option -->
                                         <% subcategories.forEach(subcategory => { %>
-                                            <% if (product.subcategory && subcategory._id && product.subcategory.toString() === subcategory._id.toString()) { %>
-                                                <option value="<%= subcategory._id %>" selected><%= subcategory.name %></option>
-                                            <% } else { %>
-                                                <option value="<%= subcategory._id %>"><%= subcategory.name %></option>
-                                            <% } %>
+                                            <option value="<%= subcategory._id %>" <%= (subcategory._id.toString() === product.subcategory.toString()) ? 'selected' : '' %>><%= subcategory.name %></option>
                                         <% }); %>
                                     </select>
-                                </div>
+                                      
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">

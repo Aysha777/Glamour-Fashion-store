@@ -1,16 +1,30 @@
-<!-- order-details.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
-    <link rel="stylesheet" type="text/css" href="/css/order-details.css"> <!-- Include your CSS file -->
-    <style>
-        /* order-details.css */
+    <title>Your view product</title>
 
-.container {
+    <!-- Link your CSS file here -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Additional styles or CDN links can be added here if needed -->
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .float-end {
+            float: right;
+        }
+        .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -61,39 +75,51 @@
         .back-button:hover {
             text-decoration: underline;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <a href="/admin/orders" class="back-button">&larr; Back to Orders</a>
-            <h1 class="title">Order Details</h1>
-            <div class="order-info">
-                <p><strong>Order ID:</strong> <%= order._id %></p>
-                <h2 class="subtitle">User Details</h2>
-                <p><strong>Name:</strong> <%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></p>
-                <p><strong>Email:</strong> <%= order.billingDetails.email %></p>
-                <p><strong>Address:</strong> <%= order.billingDetails.billingAddress %>, <%= order.billingDetails.city %>, <%= order.billingDetails.state %>, <%= order.billingDetails.zipcode %></p>
-            </div>
-            <div class="order-items">
-                <h2 class="subtitle">Order Items</h2>
-                <ul>
-                    <% order.items.forEach(item => { %>
-                        <li>
-                            <p><strong>Product:</strong> <%= item.product.product_title %></p>
-                            <p><strong>Quantity:</strong> <%= item.quantity %></p>
-                            <p><strong>Subtotal:</strong> <%= item.subtotal %></p>
-                        </li>
-                    <% }); %>
-                </ul>
-            </div>
-            <div class="order-summary">
-                <h2 class="subtitle">Order Summary</h2>
-                <p><strong>Total Price:</strong> $<%= order.totalPrice %></p>
-                <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
-                <p><strong>Order Date:</strong> <%= order.createdAt.toDateString() %></p>
+
+<%- include('partials/header') %>
+<%- include('partials/aside-nav') %>
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="container">
+            <div class="card">
+                <a href="/admin/orders" class="back-button">&larr; Back to Orders</a>
+                <h1 class="title">Order Details</h1>
+                <div class="order-info">
+                    <p><strong>Order ID:</strong> <%= order._id %></p>
+                    <h2 class="subtitle">User Details</h2>
+                    <p><strong>Name:</strong> <%= order.billingDetails.firstName %> <%= order.billingDetails.lastName %></p>
+                    <p><strong>Email:</strong> <%= order.billingDetails.email %></p>
+                    <p><strong>Address:</strong> <%= order.billingDetails.billingAddress %>, <%= order.billingDetails.city %>, <%= order.billingDetails.state %>, <%= order.billingDetails.zipcode %></p>
+                </div>
+                <div class="order-items">
+                    <h2 class="subtitle">Order Items</h2>
+                    <ul>
+                        <% order.items.forEach(item => { %>
+                            <li>
+                                <p><strong>Product:</strong> <%= item.product.product_title %></p>
+                                <p><strong>Quantity:</strong> <%= item.quantity %></p>
+                                <p><strong>Subtotal:</strong> <%= item.subtotal %></p>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+                <div class="order-summary">
+                    <h2 class="subtitle">Order Summary</h2>
+                    <p><strong>Total Price ₹ :</strong> <%= order.totalPrice %></p>
+                    <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
+                    <p><strong>Order Date:</strong> <%= order.createdAt.toDateString() %></p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+</main>  
+</main>
+
+
 </body>
 </html>

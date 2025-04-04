@@ -5,305 +5,330 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link rel="stylesheet" href="styles.css">
-</head>
-<style>
-    body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    
-}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 
-.main-content {
-    margin-left: 200px; /* Adjust this value to match the width of the sidebar */
-    padding: 20px;
-}
+        <style>
+            body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            
+        }
 
-.section {
-    margin-bottom: 20px;
-}
 
-.hidden {
-    display: none;
-}
-.user-profile-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-}
+        .main-content {
+            margin-left: 200px; /* Adjust this value to match the width of the sidebar */
+            padding: 20px;
+        }
 
-.user-profile-card .card-header {
-    background-color: #45A8E1;
-    color: #fff;
-    padding: 15px 20px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
+        .section {
+            margin-bottom: 20px;
+        }
 
-.user-profile-card .card-body {
-    padding: 20px;
-}
+        .hidden {
+            display: none;
+        }
+        .user-profile-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
 
-.user-details-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .user-profile-card .card-header {
+            background-color: #45A8E1;
+            color: #fff;
+            padding: 15px 20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
 
-.user-details-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
+        .user-profile-card .card-body {
+            padding: 20px;
+        }
 
-.user-details-table tr:last-child td {
-    border-bottom: none;
-}
+        .user-details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-/* Optional: Add hover effect on table rows */
-.user-details-table tr:hover {
-    background-color: #BCE0F5;
-}
+        .user-details-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
 
-.billing-details-title {
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
+        .user-details-table tr:last-child td {
+            border-bottom: none;
+        }
 
-.billing-details-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        /* Optional: Add hover effect on table rows */
+        .user-details-table tr:hover {
+            background-color: #BCE0F5;
+        }
 
-.billing-details-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .billing-details-title {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 
-.billing-details-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
+        .billing-details-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-.billing-details-table tr:last-child td {
-    border-bottom: none;
-}
+        .billing-details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-/* Optional: Add hover effect on table rows */
-.billing-details-table tr:hover {
-    background-color: #BCE0F5;
-}
+        .billing-details-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
 
-/* Style for the card */
-.cardo {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
+        .billing-details-table tr:last-child td {
+            border-bottom: none;
+        }
 
-/* Style for the card header */
-.card-headero {
-    background-color: #ffff;
-    color: #000000;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 6px 6px 0 0;
-}
+        /* Optional: Add hover effect on table rows */
+        .billing-details-table tr:hover {
+            background-color: #BCE0F5;
+        }
 
-/* Style for the card body */
-.card-bodyo {
-    padding: 20px;
-}
+        /* Style for the card */
+        .cardo {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
 
-/* Style for the table */
-.tableo {
-    width: 100%;
-    border-collapse: collapse;
-}
+        /* Style for the card header */
+        .card-headero {
+            background-color: #ffff;
+            color: #000000;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            border-radius: 6px 6px 0 0;
+        }
 
-/* Style for table headers */
-.tableo th {
-    padding: 12px;
-    text-align: left;
-    background-color: #f2f2f2;
-    border-bottom: 2px solid #ddd;
-}
+        /* Style for the card body */
+        .card-bodyo {
+            padding: 20px;
+        }
 
-/* Style for table data */
-.tableo td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
+        /* Style for the table */
+        .tableo {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-/* Style for table data in the first column */
-.tableo td:first-child {
-    font-weight: bold;
-}
+        /* Style for table headers */
+        .tableo th {
+            padding: 12px;
+            text-align: left;
+            background-color: #f2f2f2;
+            border-bottom: 2px solid #ddd;
+        }
 
-/* Style for table rows when hovering */
-.tableo tbody tr:hover {
-    background-color: #f5f5f5;
-}
+        /* Style for table data */
+        .tableo td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
 
-/* Style for the button */
-.btn-small {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-}
+        /* Style for table data in the first column */
+        .tableo td:first-child {
+            font-weight: bold;
+        }
 
-/* Style for the button on hover */
-.btn-small:hover {
-    background-color: #0056b3;
-}
+        /* Style for table rows when hovering */
+        .tableo tbody tr:hover {
+            background-color: #f5f5f5;
+        }
 
-/* Center the button text */
-.btn-small.d-block {
-    text-align: center;
-}.product-item {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        /* Style for the button */
+        .btn-small {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
 
-.product-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        /* Style for the button on hover */
+        .btn-small:hover {
+            background-color: #0056b3;
+        }
 
-.image-box {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    margin-right: 20px;
-}
+        /* Center the button text */
+        .btn-small.d-block {
+            text-align: center;
+        }.product-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-.product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+        .product-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-.product-details {
-    flex-grow: 1;
-}
+        .image-box {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            margin-right: 20px;
+        }
 
-.product-name {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-}
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-.product-price {
-    margin: 0;
-    font-size: 1rem;
-    color: #666;
-}
+        .product-details {
+            flex-grow: 1;
+        }
 
-.view-details {
-    padding: 8px 16px;
-    background-color: #BCE0F5;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .product-name {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
 
-.view-details:hover {
-    background-color: #45A8E1;
-}
+        .product-price {
+            margin: 0;
+            font-size: 1rem;
+            color: #666;
+        }
 
-.carde {
-    border: 1px solid #ddd; /* Add a border */
-    border-radius: 8px; /* Add some border radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-    margin-bottom: 20px; /* Add some spacing between cards */
-}
+        .view-details {
+            padding: 8px 16px;
+            background-color: #BCE0F5;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.card-headere {
-    background-color: #f8f9fa; /* Light gray background color for the header */
-    padding: 10px 20px; /* Add padding */
-    border-bottom: 1px solid #ddd; /* Add a bottom border */
-}
+        .view-details:hover {
+            background-color: #45A8E1;
+        }
 
-.card-headere h5 {
-    margin: 0; /* Remove margin */
-    font-size: 18px; /* Increase font size */
-}
+        .carde {
+            border: 1px solid #ddd; /* Add a border */
+            border-radius: 8px; /* Add some border radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+            margin-bottom: 20px; /* Add some spacing between cards */
+        }
 
-.card-bodye {
-    padding: 20px; /* Add padding */
-}
+        .card-headere {
+            background-color: #f8f9fa; /* Light gray background color for the header */
+            padding: 10px 20px; /* Add padding */
+            border-bottom: 1px solid #ddd; /* Add a bottom border */
+        }
 
-.form-groupe {
-    margin-bottom: 20px; /* Add spacing between form groups */
-}
+        .card-headere h5 {
+            margin: 0; /* Remove margin */
+            font-size: 18px; /* Increase font size */
+        }
 
-.form-controle {
-    border-radius: 4px; /* Add border radius to form inputs */
-}
+        .card-bodye {
+            padding: 20px; /* Add padding */
+        }
 
-.required {
-    color: red; /* Set color for required indicator */
-}
+        .form-groupe {
+            margin-bottom: 20px; /* Add spacing between form groups */
+        }
 
-.btn-fill-out {
-    background-color: #BCE0F5; /* Blue background color for buttons */
-    color: #fff; /* White text color */
-    border-radius: 4px; /* Add border radius */
-    padding: 10px 20px; /* Add padding */
-    transition: background-color 0.3s; /* Smooth transition for background color */
-}
+        .form-controle {
+            border-radius: 4px; /* Add border radius to form inputs */
+        }
 
-.btn-fill-out:hover {
-    background-color: #45A8E1; /* Darker blue background color on hover */
-}
+        .required {
+            color: red; /* Set color for required indicator */
+        }
 
-.submit {
-    width: 50%; /* Make the button full width */
-}
+        .btn-fill-out {
+            background-color: #BCE0F5; /* Blue background color for buttons */
+            color: #fff; /* White text color */
+            border-radius: 4px; /* Add border radius */
+            padding: 10px 20px; /* Add padding */
+            transition: background-color 0.3s; /* Smooth transition for background color */
+        }
 
-/* Optional: Add styles for the link inside the paragraph */
-.card-bodye p a {
-    color: #007bff; /* Blue text color for the link */
-    text-decoration: none; /* Remove underline */
-}
+        .btn-fill-out:hover {
+            background-color: #45A8E1; /* Darker blue background color on hover */
+        }
 
-.card-bodye p a:hover {
-    text-decoration: underline; /* Add underline on hover */
-}
-.image-box {
-    width: 50px; /* Adjust the width as needed */
-    height: 50px; /* Adjust the height as needed */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
+        .submit {
+            width: 50%; /* Make the button full width */
+        }
 
-.image-box img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
+        /* Optional: Add styles for the link inside the paragraph */
+        .card-bodye p a {
+            color: #007bff; /* Blue text color for the link */
+            text-decoration: none; /* Remove underline */
+        }
 
-</style>
+        .card-bodye p a:hover {
+            text-decoration: underline; /* Add underline on hover */
+        }
+        .image-box {
+            width: 50px; /* Adjust the width as needed */
+            height: 50px; /* Adjust the height as needed */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .form-select {
+            display: flex;
+            justify-content: space-between;
+            width: 20%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            font-weight: 600;
+            line-height: 1.57;
+            border-radius: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 14l-7-7h14z" fill="%23000"/></svg>') no-repeat right 0.75rem center/8px 10px;
+            /* Adjust the position and size of the arrow icon */
+            border: 1px solid #e3e3e3;
+            background-color: #fff;
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        </style>
+    </head>
 <body>
     
     <%- include('../partials/user-side') %>
@@ -380,6 +405,12 @@
             <div class="cardo">
                 <div class="card-headero">
                     <h5 class="mb-0">Your Orders</h5>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Last 6 months</option>
+                        <option value="1">2024</option>
+                        <option value="2">2023</option>
+                        <option value="3">2022</option>
+                      </select>
                 </div>
                 <div class="card-bodyo">
                     <div class="order-list">
@@ -615,7 +646,12 @@
         console.error('Error fetching order details:', error);
     }
 }
+    document.querySelector('.form-select').addEventListener('change', function() {
+        const selectedDateRange = this.value;
+        fetchOrderDetails(selectedDateRange);
+    });
 
+    
 
 
     </script>

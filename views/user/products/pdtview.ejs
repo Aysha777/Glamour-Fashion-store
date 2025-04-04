@@ -40,6 +40,7 @@
 .alert-success {
     background-color: #28a745;
     color: #fff;
+    
 }
 
 .alert-danger {
@@ -47,6 +48,10 @@
     color: #fff;
 }
 
+.alert-dangerr {
+    background-color: #dc3545;
+    color: #fff;
+}
 
     </style>
 
@@ -181,22 +186,20 @@
             </div>
         </section>
         <footer>
-            <div id="message" class="alert <% if (typeof wishlistSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof wishlistErrorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
+            <div id="wishlistMessage" class="alert <% if (typeof wishlistSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof wishlistErrorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
                 <% if (typeof wishlistSuccessMessage !== 'undefined') { %>
                     <%= wishlistSuccessMessage %>
                 <% } else if (typeof wishlistErrorMessage !== 'undefined') { %>
                     <%= wishlistErrorMessage %>
                 <% } %>
             </div>
-            <div id="message" class="alert <% if (typeof addToCartSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof addToCartErrorMessage !== 'undefined') { %>alert-danger<% } %>" role="alert">
+            <div id="cartMessage" class="alert <% if (typeof addToCartSuccessMessage !== 'undefined') { %>alert-success<% } else if (typeof addToCartErrorMessage !== 'undefined') { %>alert-success<% } %>" role="alert">
                 <% if (typeof addToCartSuccessMessage !== 'undefined') { %>
                     <%= addToCartSuccessMessage %>
                 <% } else if (typeof addToCartErrorMessage !== 'undefined') { %>
                     <%= addToCartErrorMessage %>
                 <% } %>
             </div>
-            
-            
             
         </footer>
         
@@ -226,19 +229,48 @@
             }
         }
 
+        // function displayFlashMessage(message, type) {
+        //     var messageElement = document.getElementById('message');
+        //     if (messageElement) {
+        //         messageElement.innerHTML = message;
+        //         messageElement.classList.add('alert-' + type);
+        //         messageElement.classList.remove('hidden');
+        //         setTimeout(function () {
+        //             messageElement.innerHTML = '';
+        //             messageElement.classList.remove('alert-' + type);
+        //         }, 5000); // Hide the message after 5 seconds
+        //     }
+        // }
+        
         function displayFlashMessage(message, type) {
-            var messageElement = document.getElementById('message');
-            if (messageElement) {
-                messageElement.innerHTML = message;
-                messageElement.classList.add('alert-' + type);
-                messageElement.classList.remove('hidden');
+            var wishlistMessageElement = document.getElementById('wishlistMessage');
+            var cartMessageElement = document.getElementById('cartMessage');
+
+            if (wishlistMessageElement && type === 'wishlist') {
+                wishlistMessageElement.innerHTML = message;
+                wishlistMessageElement.classList.add('alert-' + type);
+                wishlistMessageElement.classList.remove('hidden');
                 setTimeout(function () {
-                    messageElement.innerHTML = '';
-                    messageElement.classList.remove('alert-' + type);
+                    wishlistMessageElement.innerHTML = '';
+                    wishlistMessageElement.classList.remove('alert-' + type);
+                }, 5000); // Hide the message after 5 seconds
+            }
+
+            if (cartMessageElement && type === 'cart') {
+                cartMessageElement.innerHTML = message;
+                cartMessageElement.classList.add('alert-' + type);
+                cartMessageElement.classList.remove('hidden');
+                setTimeout(function () {
+                    cartMessageElement.innerHTML = '';
+                    cartMessageElement.classList.remove('alert-' + type);
                 }, 5000); // Hide the message after 5 seconds
             }
         }
-    
+
+
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
             var detailImage = document.getElementById('detailImage');
             var thumbnailImages = document.querySelectorAll('.thumbnail-image');

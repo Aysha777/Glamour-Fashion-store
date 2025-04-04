@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+    <title>Edit Category</title>
 
     <!-- Link your CSS file here -->
     <link rel="stylesheet" type="text/css" href="/css/main.css">
@@ -16,77 +16,16 @@
 <main class="main-wrap">
     <%- include('partials/admin-header') %>
     <section class="content-main">
-        <form action="/admin/categories/edit/<%= category._id %>" method="POST">
+        <!-- edit-category.ejs -->
+        <form action="/admin/update-category/<%= category._id %>" method="POST">
+            <div class="form-group">
+                <label for="categoryName">Category Name</label>
+                <input type="text" id="categoryName" name="categoryName" value="<%= category.name %>" required>
 
-            <div class="row">
-                
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="mb-4">
-                                <label for="product_title" class="form-label">Category</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName" value="<%= category.categoryName %>">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label d-block">Sub Category</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Shirts" id="product-cat" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat"> Shirts</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="TShirt" id="product-cat-1" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-1"> TShirts </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Sweatshirts" id="product-cat-2" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-2"> Sweatshirts </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Jeans" id="product-cat-3" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-3"> Jeans </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Kurties" id="product-cat-4" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-4"> Kurties </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Bedsheet" id="product-cat-5" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-5">Bedsheet </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Carpets" id="product-cat-8" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-8"> Carpets</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Doormates" id="product-cat-8" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-8"> Doormates</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Perfumes" id="product-cat-8" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-8"> Perfumes</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Lipstick" id="product-cat-8" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-8"> Lipstick</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Nailpolish" id="product-cat-8" name="subcategoryName[]">
-                                    <label class="form-check-label" for="product-cat-8"> Nailpolish</label>
-                                </div>
-                            </div>
-        
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>    
-            <div class="row">
-                    <div class="col-lg-6">
-                        <button class="btn btn-md rounded font-sm hover-up">Update</button>
-                    </div>
-                
             </div>
+            <button type="submit" class="btn btn-primary">Update Category</button>
         </form>
+
     </section>
     <footer class="main-footer font-xs">
         <div class="row pb-30 pt-15">
@@ -103,5 +42,42 @@
         </div>
     </footer>
 </main>
+<script>
+    // Submit the form to update the category name
+const form = document.getElementById('update-category-form');
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const categoryId = form.dataset.categoryId;
+    const categoryName = form.elements['categoryName'].value;
+
+    try {
+        const response = await fetch(`/update-category/${categoryId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ categoryName })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update category');
+        }
+
+        const updatedCategory = await response.json();
+
+        // Handle the updated category data here, such as redirecting to a new page or showing a success message
+        console.log('Category updated successfully:', updatedCategory);
+
+        // Example: Redirect to the view category page
+        window.location.href = '/admin/view-category';
+    } catch (error) {
+        console.error('Error updating category:', error);
+        // Handle error
+    }
+});
+
+</script>
 </body>
 </html>

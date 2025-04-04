@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  
   color: {
     type: String,
     require: true,
@@ -38,10 +39,12 @@ const productSchema = new mongoose.Schema({
   },
   mimages: [
     {
-      type: String,
+      type: String, 
     },
   ],
   stock: {
+
+
     type: Number,
     required: true,
     default: 0,
@@ -57,6 +60,7 @@ productSchema.index({
   brand: "text",
   subcategory: "text",
   color: "text",
+
   description: "text",
 });
 
